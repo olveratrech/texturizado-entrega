@@ -6,7 +6,7 @@ técnica se guarda en `logs/` en la raíz del proyecto.
 
 ## macOS
 
-Abrir `macOS/TexturizadoCempasuchil.app`. Requiere CMake y las herramientas de línea de
+Abrir `macOS/TexturizadoCempasuchil-0.2.1.app`. Requiere CMake y las herramientas de línea de
 comandos de Xcode. macOS puede pedir confirmar **Abrir** la primera vez por tratarse de una
 aplicación local sin firma. En caso de bloqueo: clic derecho sobre la aplicación, **Abrir**.
 

@@ -3,7 +3,7 @@ Dim shell, fso, carpeta, comando, codigo
 Set shell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 carpeta = fso.GetParentFolderName(WScript.ScriptFullName)
-comando = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File """ & carpeta & "\iniciar_windows.ps1""""
+comando = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File " & Chr(34) & carpeta & "\iniciar_windows.ps1" & Chr(34)
 codigo = shell.Run(comando, 0, True)
 If codigo <> 0 Then
   MsgBox "No se pudo compilar o ejecutar Texturizado Cempasúchil. Revisa la carpeta logs.", 16, "Texturizado Cempasúchil"

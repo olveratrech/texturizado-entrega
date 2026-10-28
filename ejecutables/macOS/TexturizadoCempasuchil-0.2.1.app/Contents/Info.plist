@@ -4,12 +4,13 @@
 <dict>
     <key>CFBundleDevelopmentRegion</key><string>es</string>
     <key>CFBundleDisplayName</key><string>Texturizado Cempasúchil</string>
-    <key>CFBundleExecutable</key><string>TexturizadoCempasuchil</string>
-    <key>CFBundleIdentifier</key><string>mx.unam.cgihc.texturizadocempasuchil</string>
+    <key>CFBundleExecutable</key><string>TexturizadoCempasuchilLauncher</string>
+    <key>CFBundleIdentifier</key><string>mx.unam.cgihc.texturizadocempasuchil.launcher.v022</string>
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
     <key>CFBundleName</key><string>TexturizadoCempasuchil</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>0.2.0</string>
+    <key>CFBundleShortVersionString</key><string>0.2.2</string>
+    <key>CFBundleVersion</key><string>22</string>
     <key>LSMinimumSystemVersion</key><string>11.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
