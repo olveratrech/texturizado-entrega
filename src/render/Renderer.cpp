@@ -280,6 +280,7 @@ void Renderer::aplicarMaterial(const Shader& s, const Material& m) {
                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
     const float refuerzoEmision = nombreMaterial.find("llama") != std::string::npos ? 1.45f : 1.0f;
     s.set("uEmision", m.emision * refuerzoEmision);
+    s.set("uAutoEmision", nombreMaterial.find("papel mate") != std::string::npos ? 0.075f : 0.0f);
     s.set("uMetalico", m.metalico);
     s.set("uRugosidad", m.rugosidad);
     s.set("uEscalaNormal", m.escalaNormal);

@@ -8,6 +8,7 @@ uniform int uAlambre;
 uniform vec3 uOjo;
 uniform vec4 uColorBase;
 uniform vec3 uEmision;
+uniform float uAutoEmision;
 uniform float uMetalico;
 uniform float uRugosidad;
 uniform float uEscalaNormal;
@@ -83,6 +84,9 @@ void main() {
     normal = normalMapeada(normal);
     vec3 emision = uEmision;
     if (uTieneEmision != 0) emision *= texture(uTexturaEmision, vUV).rgb;
+    // El papel picado conserva su color en penumbra sin comportarse como una
+    // fuente de luz real ni iluminar los objetos vecinos.
+    emision += base.rgb * uAutoEmision;
     if (uSinLuz != 0) {
         FragColor = vec4(pow(max(base.rgb + emision, vec3(0.0)), vec3(1.0 / 2.2)), base.a);
         return;
@@ -115,13 +119,18 @@ void main() {
             // Los faroles iluminan en todas direcciones; su radio y atenuación
             // limitan suavemente el alcance alrededor de la estructura.
             float conoFarol = 1.0;
+            float bordeRadio = 1.0;
+            if (uLuces[i].farol > 0.5) {
+                float radio = sqrt(uLuces[i].radio2);
+                bordeRadio = 1.0 - smoothstep(radio * 0.75, radio, distancia);
+            }
             float ndl = max(dot(normal, L), 0.0);
             float atenuacion = 1.0 / (1.0 + uLuces[i].lineal * distancia +
                                      uLuces[i].cuadratica * distancia * distancia);
             vec3 medio = normalize(L + vista);
             float spec = pow(max(dot(normal, medio), 0.0), brillo) * ndl;
             color += (base.rgb * (1.0 - mr.x) * ndl + f0 * spec * mix(1.0, 0.35, mr.y))
-                     * uLuces[i].color * atenuacion * conoFarol;
+                     * uLuces[i].color * atenuacion * conoFarol * bordeRadio;
         }
     }
 

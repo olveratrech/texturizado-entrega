@@ -350,14 +350,13 @@ Nodo* Escena::nodoLote(const std::string& clave, Nodo* padre, const std::string&
 // ---------------------------------------------------------------------------
 // Casa con portal y ofrenda
 // ---------------------------------------------------------------------------
-// Una tira es un grupo: hilo y ocho papeles con pivote en su borde superior.
+// Una tira es un grupo: hilo y papeles con pivote en su borde superior.
 Nodo* Escena::crearTiraPapel(Nodo* padre, const std::string& nombre,
-                            const glm::vec3& posicion, float giro, float ancho, int variante) {
+                            const glm::vec3& posicion, float giro, float ancho, int variante, int cantidad) {
     Nodo* tira = padre->agregar(nombre);
     tira->colocar(posicion, {0.0f, giro, 0.0f});
     Nodo* hilo = instanciar("hilo_papel", tira, "hilo", {0, 0, 0});
     hilo->escala.x = ancho / 3.0f;
-    constexpr int cantidad = 8;
     const std::array<glm::vec4,7> colores{{
         {0.82f,0.05f,0.34f,1}, {0.42f,0.08f,0.72f,1}, {1.00f,0.28f,0.03f,1},
         {0.03f,0.38f,0.88f,1}, {0.08f,0.62f,0.24f,1}, {0.96f,0.70f,0.03f,1},
@@ -455,7 +454,7 @@ void Escena::construirCasaYOfrenda() {
         for (float x : {-1.6f, 1.6f}) {
             ++k;
             crearTiraPapel(casa, "papel_picado_portal_" + std::to_string(k),
-                           {x, 2.45f, z}, azar(-4.0f, 4.0f), 3.0f, k - 1);
+                           {x, 2.45f, z}, azar(-4.0f, 4.0f), 3.0f, k - 1, 6);
         }
 
     // Faroles a los lados de la entrada del portal
@@ -578,7 +577,7 @@ void Escena::construirCamino() {
         float haciaCasa = alinearX(camino.tangente(s));
         instanciar("farol", par, "farol_izq", izq * 1.55f, haciaCasa);
         instanciar("farol", par, "farol_der", -izq * 1.55f, haciaCasa);
-        crearTiraPapel(par, "papel_picado", {0.0f, 2.52f, 0.0f}, alinearX(-izq), 3.1f, k + 1);
+        crearTiraPapel(par, "papel_picado", {0.0f, 2.52f, 0.0f}, alinearX(-izq), 3.1f, k + 1, 6);
     }
 
     // Bancas para descansar junto al camino

@@ -67,7 +67,7 @@ private:
     Lote* nuevoLote(const std::string& clave, Nodo* dueno);
     Nodo* nodoLote(const std::string& clave, Nodo* padre, const std::string& nombre);
     Nodo* crearTiraPapel(Nodo* padre, const std::string& nombre, const glm::vec3& posicion,
-                         float giro, float ancho, int variante);
+                         float giro, float ancho, int variante, int cantidad = 8);
     void construirCasaYOfrenda();
     void construirAltarAprobado(Nodo* altarAprobado);
     void construirCamino();
