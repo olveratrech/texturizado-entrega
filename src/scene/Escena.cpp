@@ -597,17 +597,6 @@ void Escena::construirCamino() {
         m->rotacion.z = azar(-15.0f, 15.0f);
     }
 
-    // Personajes: una calaca camina hacia la ofrenda y un ánima la sigue
-    {
-        float s = 13.0f;
-        Nodo* c = instanciar("character-skeleton", grupo, "calaca_caminante", camino.punto(s),
-                             alinearZ(camino.tangente(s)), 2.0f);
-        (void)c;
-        float s2 = 9.0f;
-        glm::vec3 p = camino.punto(s2) - camino.izquierda(s2) * 1.9f;
-        p.y = 0.35f;
-        instanciar("character-ghost", grupo, "anima", p, alinearZ(camino.tangente(s2)), 1.7f);
-    }
 }
 
 // ---------------------------------------------------------------------------
@@ -617,8 +606,6 @@ void Escena::construirPanteon() {
     Azar azar;
     Nodo* panteon = raiz_->agregar("Panteón");
     instanciar("entrada_panteon", panteon, "portada", {0.0f, 0.0f, 16.0f}, 180.0f);
-    instanciar("character-keeper", panteon, "panteonero", {3.4f, 0.0f, 14.6f}, 200.0f, 2.0f);
-
     // Pasillo central empedrado
     {
         Camino pasillo;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Texturizado Cempasúchil
+Comment=Compila y ejecuta la escena de Cempasúchil
+Exec=sh -c 'archivo="$1"; archivo="${archivo#file://}"; dir=$(dirname "$archivo"); exec "$dir/iniciar_linux.sh"' lanzador %k
+Icon=applications-graphics
+Terminal=false
+Categories=Graphics;Education;
+StartupNotify=true
