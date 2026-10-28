@@ -27,7 +27,6 @@ const Ficha kPropios[] = {
     {"arco_cempasuchil", "Arco de cempasúchil", ""},
     {"flor_cempasuchil", "Flor de cempasúchil", ""},
     {"petalo_cempasuchil", "Pétalo de cempasúchil", ""},
-    {"veladora", "Veladora", "", "veladoras/"},
     {"veladora_1", "Veladora 1", "", "veladoras/"},
     {"veladora_2", "Veladora 2", "", "veladoras/"},
     {"veladora_3", "Veladora 3", "", "veladoras/"},
@@ -64,17 +63,17 @@ const Ficha kPropios[] = {
     {"olla_barro", "Olla de barro con tapa", ""},
     {"jarra_agua", "Jarra con agua", ""},
     {"frutero", "Frutero", ""},
-    {"plato_tamales", "Plato de tamales", ""},
-    {"plato_mole", "Plato de mole", ""},
-    {"plato_carnitas", "Plato de carnitas", ""},
-    {"plato_tacos_dorados", "Plato de tacos dorados", ""},
-    {"dulce_alegria", "Alegría de amaranto", ""},
-    {"dulce_palanqueta", "Palanqueta", ""},
-    {"dulce_cocada", "Cocada", ""},
-    {"dulce_jamoncillo", "Jamoncillo con nuez", ""},
-    {"dulce_limon_relleno", "Limón relleno de coco", ""},
-    {"dulce_tamarindo", "Dulce de tamarindo", ""},
-    {"dulce_leche_estriado", "Dulce de leche estriado", ""},
+    {"plato_tamales", "Plato de tamales", "", "platos_comida/"},
+    {"plato_mole", "Plato de mole", "", "platos_comida/"},
+    {"plato_carnitas", "Plato de carnitas", "", "platos_comida/"},
+    {"plato_tacos_dorados", "Plato de tacos dorados", "", "platos_comida/"},
+    {"dulce_alegria", "Alegría de amaranto", "", "dulces/"},
+    {"dulce_palanqueta", "Palanqueta", "", "dulces/"},
+    {"dulce_cocada", "Cocada", "", "dulces/"},
+    {"dulce_jamoncillo", "Jamoncillo con nuez", "", "dulces/"},
+    {"dulce_limon_relleno", "Limón relleno de coco", "", "dulces/"},
+    {"dulce_tamarindo", "Dulce de tamarindo", "", "dulces/"},
+    {"dulce_leche_estriado", "Dulce de leche estriado", "", "dulces/"},
 };
 
 const Ficha kLibreria[] = {
@@ -501,7 +500,7 @@ void Escena::construirCamino() {
     info("petalo_cempasuchil")->usos += nPetalos;
 
     // Veladoras a ambos lados, cada 2.2 m
-    Nodo* veladoras = nodoLote("veladora", grupo, "veladoras");
+    Nodo* veladoras = nodoLote("veladora_1", grupo, "veladoras");
     int nVel = 0;
     for (float s = 1.2f; s < L - 0.8f; s += 2.2f)
         for (float lado : {-1.0f, 1.0f}) {
@@ -510,7 +509,7 @@ void Escena::construirCamino() {
             veladoras->lote->agregar(trs(p, azar(0, 360)));
             ++nVel;
         }
-    info("veladora")->usos += nVel;
+    info("veladora_1")->usos += nVel;
 
     // Pares de faroles con una tira de papel picado entre ellos
     int k = 0;
@@ -604,7 +603,7 @@ void Escena::construirPanteon() {
     // Tumbas en tres filas a cada lado del pasillo, adornadas con flores y veladoras
     Nodo* tumbas = panteon->agregar("Tumbas");
     Nodo* flores = nodoLote("flor_cempasuchil", tumbas, "flores_tumbas");
-    Nodo* velas = nodoLote("veladora", tumbas, "veladoras_tumbas");
+    Nodo* velas = nodoLote("veladora_1", tumbas, "veladoras_tumbas");
     const char* lapidas[] = {"gravestone-cross", "gravestone-round", "gravestone-bevel", "gravestone-decorative",
                              "cross-wood"};
     int k = 0, nFlores = 0, nVelas = 0;
@@ -636,7 +635,7 @@ void Escena::construirPanteon() {
         }
     }
     info("flor_cempasuchil")->usos += nFlores;
-    info("veladora")->usos += nVelas;
+    info("veladora_1")->usos += nVelas;
 
     // Criptas y cruz atrial al fondo
     instanciar("crypt", panteon, "cripta_izq", {-9.0f, 0.0f, 31.0f}, 180.0f, 3.0f);

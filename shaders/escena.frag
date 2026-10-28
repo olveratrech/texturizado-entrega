@@ -8,7 +8,7 @@ void main() {
     if (!gl_FrontFacing) normal = -normal;
     vec3 luz = normalize(vec3(-0.55, 0.8, 0.55));
     float difusa = max(dot(normal, luz), 0.0);
-    // Luz ambiental y una luz direccional blanca: superficie gris mate.
+    // Iluminación ambiental y direccional temporal de la escena.
     float gris = pow(0.55 * (0.28 + 0.72 * difusa), 1.0 / 2.2);
     FragColor = vec4(vec3(gris), 1.0);
 }

@@ -1,4 +1,4 @@
-// Entrega independiente de modelado: recorrido y vista de alambre.
+// Entrega independiente de texturizado.
 #include "App.h"
 #include "Registro.h"
 #include "Rutas.h"

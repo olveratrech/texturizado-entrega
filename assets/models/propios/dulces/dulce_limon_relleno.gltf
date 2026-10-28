@@ -183,7 +183,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"gris de modelado.001",
+			"name":"material limon relleno",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.4300000071525574,

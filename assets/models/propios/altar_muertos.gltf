@@ -194,12 +194,12 @@
 		{
 			"mimeType":"image/png",
 			"name":"mantel.png",
-			"uri":"../../textures-final-texturas/altar/mantel.png"
+			"uri":"../../textures/altar/mantel.png"
 		},
 		{
 			"mimeType":"image/png",
 			"name":"petate.png",
-			"uri":"../../textures-final-texturas/altar/petate.png"
+			"uri":"../../textures/altar/petate.png"
 		}
 	],
 	"accessors":[

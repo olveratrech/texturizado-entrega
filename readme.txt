@@ -1,6 +1,6 @@
-Cempasuchil - Modelado
+Cempasuchil - Texturizado
 
-Ejecutar ModeladoCempasuchil con assets/ y shaders/ junto al programa.
+Ejecutar TexturizadoCempasuchil con assets/ y shaders/ junto al programa.
 
 W-A-S-D: navegacion por la escena. 
 Q/E: bajar/subir. 

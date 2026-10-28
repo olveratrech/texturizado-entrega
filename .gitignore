@@ -27,10 +27,9 @@ registro.txt
 *.log
 *.tmp
 
-# En doc/ se publica únicamente el PDF final, no el fuente ni los
-# auxiliares e imágenes usados para compilarlo.
+# En doc/ se publica únicamente el PDF final de texturizado.
 /doc/**
-!/doc/Equipo-8-modelado.pdf
+!/doc/Equipo-8-texturizado.pdf
 
 # Archivos locales del sistema y de edición.
 .DS_Store

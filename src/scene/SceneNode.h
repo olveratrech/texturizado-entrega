@@ -4,7 +4,7 @@
 // XYZ y escala) relativa a su padre. La matriz de MUNDO se obtiene al recorrer
 // el árbol:  M_mundo(hijo) = M_mundo(padre) * T * R * S
 // Así, al mover el altar se mueven todas sus ofrendas, al girar el brazo de un
-// farol gira también la lámpara, etc. (modelado jerárquico).
+// farol gira también la lámpara, etc. (jerarquía de escena).
 #pragma once
 
 #include "render/Model.h"

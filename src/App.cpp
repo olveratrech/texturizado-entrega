@@ -68,7 +68,7 @@ bool App::iniciar() {
         op_.ancho = std::max(960, w * 4 / 5);
         op_.alto = std::max(540, h * 4 / 5);
     }
-    ventana_ = glfwCreateWindow(op_.ancho, op_.alto, "Cempasúchil | Modelado",
+    ventana_ = glfwCreateWindow(op_.ancho, op_.alto, "Cempasúchil | Texturizado",
                                nullptr, nullptr);
     if (!ventana_) {
         registro::fatal("No se pudo crear la ventana. Se requiere una tarjeta gráfica compatible con OpenGL 3.3.");

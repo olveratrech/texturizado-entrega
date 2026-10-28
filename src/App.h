@@ -1,4 +1,4 @@
-// Aplicacion independiente para la entrega de modelado.
+// Aplicación independiente para la entrega de texturizado.
 #pragma once
 #include "render/Renderer.h"
 #include "scene/Camera.h"
