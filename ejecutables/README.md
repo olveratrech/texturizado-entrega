@@ -12,7 +12,7 @@ aplicación local sin firma. En caso de bloqueo: clic derecho sobre la aplicaci�
 
 ## Windows
 
-Abrir `windows/TexturizadoCempasuchil.vbs`. Requiere CMake y Visual Studio 2022 con la carga
+Abrir `windows/TexturizadoCempasuchil.vbs`. Requiere CMake y Visual Studio 2022 o 2026 con la carga
 de trabajo **Desarrollo para el escritorio con C++**. PowerShell y la compilación permanecen
 ocultos; los errores se guardan en `logs/lanzador-windows.log`.
 
