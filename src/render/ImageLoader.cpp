@@ -2,11 +2,14 @@
 
 #include <algorithm>
 #include <fstream>
+#include <limits>
 
 #ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <ImageIO/ImageIO.h>
+#else
+#include <stb_image.h>
 #endif
 
 bool decodificarImagen(const void* datos, std::size_t tam, ImagenRGBA& salida) {
@@ -51,10 +54,22 @@ bool decodificarImagen(const void* datos, std::size_t tam, ImagenRGBA& salida) {
     }
     return true;
 #else
-    (void)datos;
-    (void)tam;
-    (void)salida;
-    return false;
+    if (!datos || tam == 0 || tam > static_cast<std::size_t>(std::numeric_limits<int>::max())) return false;
+    int canales = 0;
+    stbi_set_flip_vertically_on_load(0);  // glTF y stb_image usan el mismo origen UV.
+    stbi_uc* pixeles = stbi_load_from_memory(
+        static_cast<const stbi_uc*>(datos), static_cast<int>(tam),
+        &salida.ancho, &salida.alto, &canales, STBI_rgb_alpha);
+    if (!pixeles || salida.ancho <= 0 || salida.alto <= 0) {
+        if (pixeles) stbi_image_free(pixeles);
+        salida = {};
+        return false;
+    }
+    const std::size_t bytes = static_cast<std::size_t>(salida.ancho) *
+                              static_cast<std::size_t>(salida.alto) * 4;
+    salida.pixeles.assign(pixeles, pixeles + bytes);
+    stbi_image_free(pixeles);
+    return true;
 #endif
 }
 

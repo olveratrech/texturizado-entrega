@@ -61,7 +61,8 @@ set_target_properties(TexturizadoCempasuchil PROPERTIES
 target_include_directories(TexturizadoCempasuchil PRIVATE
     src
     external/glm
-    external/cgltf)
+    external/cgltf
+    external/stb)
 
 target_link_libraries(TexturizadoCempasuchil PRIVATE glfw glad)
 target_compile_definitions(TexturizadoCempasuchil PRIVATE GLM_ENABLE_EXPERIMENTAL)
