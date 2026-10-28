@@ -56,6 +56,7 @@ const Ficha kPropios[] = {
     {"farol", "Farol de hojalata", ""},
     {"entrada_panteon", "Portada del panteón", ""},
     {"casa_adobe", "Casa de adobe con portal", ""},
+    {"casa_adobe_altar", "Casa de adobe del altar", "Variante sin los dos pilares centrales del portal."},
     // Extras de la ofrenda, en la carpeta raíz de modelos propios.
     {"botella_corona", "Botella de Corona", ""},
     {"botella_victoria", "Botella de Victoria", ""},
@@ -378,7 +379,7 @@ void Escena::construirCasaYOfrenda() {
     Azar azar;
     Nodo* casa = raiz_->agregar("Casa");
     casa->colocar({0.0f, 0.0f, -16.0f});
-    instanciar("casa_adobe", casa, "casa_adobe", {0, 0, 0});
+    instanciar("casa_adobe_altar", casa, "casa_adobe_altar", {0, 0, 0});
 
     // La ofrenda se coloca sobre la banqueta del portal (0.15 m), frente al muro.
     Nodo* ofrenda = casa->agregar("Ofrenda");
@@ -402,9 +403,9 @@ void Escena::construirCasaYOfrenda() {
             a=glm::min(a,v);b=glm::max(b,v);
         }
         minimo=glm::min(minimo,a);maximo=glm::max(maximo,b);
-        if(a.z<.012f || b.z>3.30f || a.x< -3.60f || b.x>3.60f || a.y<.1499f || b.y>2.57f)
+        if(a.z<.012f || b.z>3.70f || a.x< -3.60f || b.x>3.60f || a.y<.1499f || b.y>2.57f)
             throw std::runtime_error("La composición no cabe dentro del portal");
-        for(float x:{-3.4f,-1.15f,1.15f,3.4f}) {
+        for(float x:{-3.4f,3.4f}) {
             if(b.x>x-.14f && a.x<x+.14f && b.z>2.86f && a.z<3.14f && b.y>.15f && a.y<.32f)
                 throw std::runtime_error("Altar o petate intersecta una base de columna");
             if(b.x>x-.10f && a.x<x+.10f && b.z>2.90f && a.z<3.10f && b.y>.32f && a.y<2.62f)
@@ -421,9 +422,23 @@ void Escena::construirCasaYOfrenda() {
         for(const auto& hijo:n->hijos)comprobarPortal(hijo.get());
     };
     comprobarPortal(aprobado);
-    registro::info("ENCAJE PORTAL: min=(%.4f,%.4f,%.4f), max=(%.4f,%.4f,%.4f); pared, suelo, techo y columnas libres",
+    registro::info("ENCAJE PORTAL: min=(%.4f,%.4f,%.4f), max=(%.4f,%.4f,%.4f); pared, suelo, techo y pilares exteriores libres",
         minimo.x,minimo.y,minimo.z,maximo.x,maximo.y,maximo.z);
-    registro::info("ALTAR IMPORTADO: 3033 colocaciones; escala=0.95; casa Z=1.40; petate ancho=1.90 m");
+    registro::info("ALTAR IMPORTADO: 3033 colocaciones; escala=0.95; casa Z=1.40; petate hasta Z=3.66 m");
+
+    // El marco exportado mide 2.534641 m desde el piso. Se referencia el plano
+    // del carrizo (no la envolvente irregular del follaje): postes sobre la
+    // banqueta, 15 cm libres bajo el techo y apenas 4 cm delante del muro.
+    // La geometría que queda detrás del altar se oculta mediante profundidad.
+    constexpr float escalaArco = 0.895f;
+    constexpr float medioAnchoMarco = 1.334641f;
+    const float centroX = medioAnchoMarco * escalaArco;
+    constexpr float apoyoY = 0.15f;
+    constexpr float juntoAlMuroZ = 0.04f;
+    instanciar("arco_cempasuchil", casa, "Arco de cempasúchil izquierdo",
+               {-centroX, apoyoY, juntoAlMuroZ}, 0.0f, escalaArco);
+    instanciar("arco_cempasuchil", casa, "Arco de cempasúchil derecho",
+               {centroX, apoyoY, juntoAlMuroZ}, 0.0f, escalaArco);
     // El bloque anterior consumía 2 giros y 520×5 muestras para la cruz de pétalos.
     // Preservar la secuencia del papel del portal y las mariposas del entorno.
     for(int i=0;i<2602;++i)(void)azar(0,1);

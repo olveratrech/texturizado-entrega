@@ -243,8 +243,8 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
         // sobre el factor exportado, sin alterar las texturas ni el vidrio envolvente.
         if (nombreMaterial.find("victoria cerveza") != std::string::npos)
             mat.colorBase *= glm::vec4(0.42f, 0.25f, 0.12f, 1.0f);
-        if (nombreMaterial.find("agua transparente como vaso") != std::string::npos)
-            mat.colorBase *= glm::vec4(0.28f, 0.62f, 1.0f, 1.0f);
+        if (mat.tipoTransparente == 2 && nombreMaterial.find("agua") != std::string::npos)
+            mat.colorBase *= glm::vec4(0.12f, 0.42f, 1.0f, 1.0f);
         if (!m.has_pbr_metallic_roughness && m.normal_texture.texture) mat.texcoord = m.normal_texture.texcoord;
         mat.mezcla = m.alpha_mode == cgltf_alpha_mode_blend || mat.transmision > 0.0f;
         mat.mascara = m.alpha_mode == cgltf_alpha_mode_mask;

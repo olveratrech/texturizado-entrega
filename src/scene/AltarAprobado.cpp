@@ -25,8 +25,14 @@ constexpr Piso pisos[] = {
 void Escena::construirAltarAprobado(Nodo* altarAprobado) {
  auto* altar = instanciar("altar_muertos", altarAprobado, "Mesa de tres pisos y petate", {0, 0, 0});
  altar->escala = {1.5f, 1.0f, 1.9f};
- // Restaurar el petate con el fondo original de la composición anterior.
- if (auto* petate = altar->buscar("petate")) petate->escala.z = 1.0f / 1.9f;
+ // Conservar el borde posterior del petate y prolongar solamente el delantero
+ // hasta casi el nuevo frente de la banqueta (3.66 m en el marco de la casa).
+ if (auto* petate = altar->buscar("petate")) {
+  constexpr float extensionFrontal = 1.39f;
+  constexpr float compensacionAnclaje = -0.3315f;
+  petate->escala.z = extensionFrontal / 1.9f;
+  petate->posicion.z = compensacionAnclaje / 1.9f;
+ }
 
  const Modelo& jarron = *modelo("jarron_talavera");
  // El archivo actual incluye el ramo. El cuerpo mide 0.305; lo dejamos en 0.30.
