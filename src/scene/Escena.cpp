@@ -8,6 +8,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <random>
 #include <functional>

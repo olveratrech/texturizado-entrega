@@ -5,7 +5,18 @@ $Log = Join-Path $LogDir "lanzador-windows.log"
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 Add-Content $Log "===== $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') Windows ====="
 
+$Mutex = New-Object System.Threading.Mutex($false, "Local\TexturizadoCempasuchilCompilacion")
+$PoseeMutex = $false
+
 try {
+    # El lanzador permanece oculto durante la compilación. Evitar que otro doble
+    # clic inicie un segundo MSBuild sobre los mismos archivos intermedios.
+    $PoseeMutex = $Mutex.WaitOne(0)
+    if (-not $PoseeMutex) {
+        Add-Content $Log "Ya existe una compilación o ejecución del lanzador en curso; se omite esta solicitud."
+        exit 0
+    }
+
     $CMake = (Get-Command cmake -ErrorAction Stop).Source
 
     # Elegir el generador que corresponde a la instancia instalada. Visual Studio
@@ -60,4 +71,7 @@ try {
 } catch {
     Add-Content $Log "ERROR: $($_.Exception.Message)"
     exit 1
+} finally {
+    if ($PoseeMutex) { $Mutex.ReleaseMutex() }
+    $Mutex.Dispose()
 }
