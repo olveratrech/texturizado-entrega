@@ -1,0 +1,247 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "dulce_palanqueta",
+      "nodes": [
+        2
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "cacahuates",
+      "rotation": [
+        0,
+        0.2925141453742981,
+        0,
+        0.9562612175941467
+      ],
+      "translation": [
+        -0.04924194514751434,
+        0.012236249633133411,
+        0.024059105664491653
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "caramelo",
+      "translation": [
+        0,
+        0.006000000052154064,
+        0
+      ]
+    },
+    {
+      "children": [
+        0,
+        1
+      ],
+      "name": "dulce_palanqueta"
+    }
+  ],
+  "materials": [
+    {
+      "name": "gris mate",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.55,
+          0.55,
+          0.55,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": true
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Sphere",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2,
+            "TANGENT": 3
+          },
+          "indices": 4,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7,
+            "TANGENT": 8
+          },
+          "indices": 9,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 24380,
+      "max": [
+        0.11208464205265045,
+        0.004310952965170145,
+        0.060754235833883286
+      ],
+      "min": [
+        -0.0030654349830001593,
+        -0.0031696846708655357,
+        -0.04149286448955536
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 24380,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 24380,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 24380,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5123,
+      "count": 103680,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 151,
+      "max": [
+        0.057500001043081284,
+        0.006000000052154064,
+        0.032499998807907104
+      ],
+      "min": [
+        -0.057500001043081284,
+        -0.006000000052154064,
+        -0.032499998807907104
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 151,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5126,
+      "count": 151,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 151,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5123,
+      "count": 564,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 292560,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 292560,
+      "byteOffset": 292560,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 195040,
+      "byteOffset": 585120,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 390080,
+      "byteOffset": 780160,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 207360,
+      "byteOffset": 1170240,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1812,
+      "byteOffset": 1377600,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1812,
+      "byteOffset": 1379412,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1208,
+      "byteOffset": 1381224,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2416,
+      "byteOffset": 1382432,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1128,
+      "byteOffset": 1384848,
+      "target": 34963
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1385976,
+      "uri": "dulce_palanqueta.bin"
+    }
+  ]
+}

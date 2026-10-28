@@ -1,0 +1,43 @@
+# Carpetas generadas por CMake, Xcode, Visual Studio o Make.
+/build/
+/build-*/
+/cmake-build-*/
+/out/
+/.vs/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserdata/
+*.xcuserstate
+*.dSYM/
+
+# Ejecutables y archivos intermedios. El código se compila en cada plataforma.
+*.exe
+*.o
+*.obj
+*.a
+*.pdb
+*.ilk
+
+# Registros y archivos temporales de ejecución.
+registro.txt
+*.log
+*.tmp
+
+# En doc/ se publica únicamente el PDF final, no el fuente ni los
+# auxiliares e imágenes usados para compilarlo.
+/doc/**
+!/doc/Equipo-8-modelado.pdf
+
+# Archivos locales del sistema y de edición.
+.DS_Store
+*~
+*.swp
+*.bak
+*.blend1
+*.blend2
+__pycache__/
+*.pyc

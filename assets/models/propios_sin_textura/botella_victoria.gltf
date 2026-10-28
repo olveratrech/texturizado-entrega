@@ -1,0 +1,411 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "botella_cerveza",
+      "nodes": [
+        4
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "cerveza"
+    },
+    {
+      "mesh": 1,
+      "name": "corcholata"
+    },
+    {
+      "mesh": 2,
+      "name": "vidrio_botella"
+    },
+    {
+      "mesh": 3,
+      "name": "zona_etiqueta"
+    },
+    {
+      "children": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "name": "botella_victoria"
+    }
+  ],
+  "materials": [
+    {
+      "name": "gris mate",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.55,
+          0.55,
+          0.55,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": true
+    }
+  ],
+  "meshes": [
+    {
+      "name": "cerveza",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2,
+            "TANGENT": 3
+          },
+          "indices": 4,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "corcholata",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7,
+            "TANGENT": 8
+          },
+          "indices": 9,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "vidrio_botella",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 10,
+            "NORMAL": 11,
+            "TEXCOORD_0": 12,
+            "TANGENT": 13
+          },
+          "indices": 14,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "zona_etiqueta",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 15,
+            "NORMAL": 16,
+            "TEXCOORD_0": 17,
+            "TANGENT": 18
+          },
+          "indices": 19,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 794,
+      "max": [
+        0.02800000086426735,
+        0.21699999272823334,
+        0.02800000086426735
+      ],
+      "min": [
+        -0.02800000086426735,
+        0.006000000052154064,
+        -0.02800000086426735
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 794,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 794,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 794,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5123,
+      "count": 3456,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 898,
+      "max": [
+        0.01614999957382679,
+        0.2720000147819519,
+        0.016104841604828835
+      ],
+      "min": [
+        -0.015969617292284966,
+        0.26600000262260437,
+        -0.016104841604828835
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 898,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5126,
+      "count": 898,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 898,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5123,
+      "count": 3024,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 12146,
+      "max": [
+        0.030629629269242287,
+        0.26600000262260437,
+        0.030629629269242287
+      ],
+      "min": [
+        -0.030629629269242287,
+        0,
+        -0.030629629269242287
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5126,
+      "count": 12146,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 12146,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 12146,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5123,
+      "count": 67200,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5126,
+      "count": 1000,
+      "max": [
+        0.030700000002980232,
+        0.13899999856948853,
+        0.030700000002980232
+      ],
+      "min": [
+        -0.030700000002980232,
+        0.035999998450279236,
+        -0.030700000002980232
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 16,
+      "componentType": 5126,
+      "count": 1000,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 17,
+      "componentType": 5126,
+      "count": 1000,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 18,
+      "componentType": 5126,
+      "count": 1000,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 19,
+      "componentType": 5123,
+      "count": 4608,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 9528,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 9528,
+      "byteOffset": 9528,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6352,
+      "byteOffset": 19056,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12704,
+      "byteOffset": 25408,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6912,
+      "byteOffset": 38112,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10776,
+      "byteOffset": 45024,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10776,
+      "byteOffset": 55800,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 7184,
+      "byteOffset": 66576,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 14368,
+      "byteOffset": 73760,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6048,
+      "byteOffset": 88128,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 145752,
+      "byteOffset": 94176,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 145752,
+      "byteOffset": 239928,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 97168,
+      "byteOffset": 385680,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 194336,
+      "byteOffset": 482848,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 134400,
+      "byteOffset": 677184,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12000,
+      "byteOffset": 811584,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12000,
+      "byteOffset": 823584,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 8000,
+      "byteOffset": 835584,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 16000,
+      "byteOffset": 843584,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 9216,
+      "byteOffset": 859584,
+      "target": 34963
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 868800,
+      "uri": "botella_victoria.bin"
+    }
+  ]
+}
