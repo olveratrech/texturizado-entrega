@@ -1,6 +1,7 @@
 #include "render/ImageLoader.h"
 
 #include <algorithm>
+#include <fstream>
 
 #ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
@@ -55,4 +56,29 @@ bool decodificarImagen(const void* datos, std::size_t tam, ImagenRGBA& salida) {
     (void)salida;
     return false;
 #endif
+}
+
+GLuint cargarTextura2D(const std::string& ruta, bool srgb, bool repetir) {
+    std::ifstream archivo(ruta, std::ios::binary | std::ios::ate);
+    if (!archivo) return 0;
+    const std::streamsize tam = archivo.tellg();
+    if (tam <= 0) return 0;
+    std::vector<std::uint8_t> datos(static_cast<std::size_t>(tam));
+    archivo.seekg(0);
+    if (!archivo.read(reinterpret_cast<char*>(datos.data()), tam)) return 0;
+    ImagenRGBA imagen;
+    if (!decodificarImagen(datos.data(), datos.size(), imagen)) return 0;
+    GLuint id = 0;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB8_ALPHA8 : GL_RGBA8,
+                 imagen.ancho, imagen.alto, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagen.pixeles.data());
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repetir ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repetir ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return id;
 }

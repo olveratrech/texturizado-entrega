@@ -1,446 +1,446 @@
 {
-	"asset":{
-		"generator":"Khronos glTF Blender I/O v5.2.40",
-		"version":"2.0"
-	},
-	"extensionsUsed":[
-		"KHR_materials_transmission",
-		"KHR_materials_emissive_strength",
-		"KHR_materials_ior"
-	],
-	"scene":0,
-	"scenes":[
-		{
-			"name":"veladora_2",
-			"nodes":[
-				4
-			]
-		}
-	],
-	"nodes":[
-		{
-			"mesh":0,
-			"name":"cera",
-			"translation":[
-				0,
-				0.08532430976629257,
-				0
-			]
-		},
-		{
-			"mesh":1,
-			"name":"llama_2",
-			"translation":[
-				0.0017999999690800905,
-				0.17000000178813934,
-				0
-			]
-		},
-		{
-			"mesh":2,
-			"name":"mecha",
-			"translation":[
-				0.000851249904371798,
-				0.1665000021457672,
-				-0.00012681802036240697
-			]
-		},
-		{
-			"mesh":3,
-			"name":"vaso",
-			"translation":[
-				0,
-				0.08704999834299088,
-				0
-			]
-		},
-		{
-			"children":[
-				0,
-				1,
-				2,
-				3
-			],
-			"name":"veladora_2"
-		}
-	],
-	"materials":[
-		{
-			"doubleSided":true,
-			"name":"cera.002",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":0
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.6700000166893005
-			}
-		},
-		{
-			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				1,
-				1
-			],
-			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":4
-				}
-			},
-			"name":"llama calida",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0,
-					0,
-					0,
-					1
-				]
-			}
-		},
-		{
-			"doubleSided":true,
-			"name":"mecha.002",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":1
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.8500000238418579
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_transmission":{
-					"transmissionFactor":1
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
-				}
-			},
-			"name":"vaso.002",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":2
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.04500000178813934
-			}
-		}
-	],
-	"meshes":[
-		{
-			"name":"cera.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":0,
-						"NORMAL":1,
-						"TEXCOORD_0":2
-					},
-					"indices":3,
-					"material":0
-				}
-			]
-		},
-		{
-			"name":"llama",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":4,
-						"NORMAL":5
-					},
-					"indices":6,
-					"material":1
-				}
-			]
-		},
-		{
-			"name":"mecha.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":7,
-						"NORMAL":8,
-						"TEXCOORD_0":9
-					},
-					"indices":10,
-					"material":2
-				}
-			]
-		},
-		{
-			"name":"vaso.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":11,
-						"NORMAL":12,
-						"TEXCOORD_0":13
-					},
-					"indices":14,
-					"material":3
-				}
-			]
-		}
-	],
-	"textures":[
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":0
-		}
-	],
-	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"veladora_color",
-			"uri":"../../../textures/veladoras/veladora_color.png"
-		}
-	],
-	"accessors":[
-		{
-			"bufferView":0,
-			"componentType":5126,
-			"count":17424,
-			"max":[
-				0.03245434910058975,
-				0.07892430573701859,
-				0.03245434910058975
-			],
-			"min":[
-				-0.03245434910058975,
-				-0.07892431318759918,
-				-0.03245434910058975
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":17424,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":17424,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5123,
-			"count":104532,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":866,
-			"max":[
-				0.004672233015298843,
-				0.032999999821186066,
-				0.0030687684193253517
-			],
-			"min":[
-				-0.0031359894201159477,
-				0,
-				-0.0030687684193253517
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":866,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":6,
-			"componentType":5123,
-			"count":5184,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":7,
-			"componentType":5126,
-			"count":181,
-			"max":[
-				0.0015012499643489718,
-				0.005500003695487976,
-				0.0007450047414749861
-			],
-			"min":[
-				-0.00150124984793365,
-				-0.005500003695487976,
-				-0.0007450047414749861
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":8,
-			"componentType":5126,
-			"count":181,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":9,
-			"componentType":5126,
-			"count":181,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":10,
-			"componentType":5123,
-			"count":888,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":11,
-			"componentType":5126,
-			"count":29287,
-			"max":[
-				0.03550000116229057,
-				0.08704999834299088,
-				0.03550000116229057
-			],
-			"min":[
-				-0.03550000116229057,
-				-0.08704999834299088,
-				-0.03550000116229057
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":12,
-			"componentType":5126,
-			"count":29287,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":13,
-			"componentType":5126,
-			"count":29287,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":14,
-			"componentType":5123,
-			"count":173652,
-			"type":"SCALAR"
-		}
-	],
-	"bufferViews":[
-		{
-			"buffer":0,
-			"byteLength":209088,
-			"byteOffset":0,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":209088,
-			"byteOffset":209088,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":139392,
-			"byteOffset":418176,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":209064,
-			"byteOffset":557568,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":10392,
-			"byteOffset":766632,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":10392,
-			"byteOffset":777024,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":10368,
-			"byteOffset":787416,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":2172,
-			"byteOffset":797784,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2172,
-			"byteOffset":799956,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1448,
-			"byteOffset":802128,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1776,
-			"byteOffset":803576,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":351444,
-			"byteOffset":805352,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":351444,
-			"byteOffset":1156796,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":234296,
-			"byteOffset":1508240,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":347304,
-			"byteOffset":1742536,
-			"target":34963
-		}
-	],
-	"samplers":[
-		{
-			"magFilter":9729,
-			"minFilter":9987
-		}
-	],
-	"buffers":[
-		{
-			"byteLength":2089840,
-			"uri":"veladora_2.bin"
-		}
-	]
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extensionsUsed": [
+    "KHR_materials_transmission",
+    "KHR_materials_emissive_strength",
+    "KHR_materials_ior"
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        4
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "cera",
+      "translation": [
+        0,
+        0.08532430976629257,
+        0
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "llama_2",
+      "translation": [
+        0.0017999999690800905,
+        0.17000000178813934,
+        0
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "mecha",
+      "translation": [
+        0.000851249904371798,
+        0.1665000021457672,
+        -0.00012681802036240697
+      ]
+    },
+    {
+      "mesh": 3,
+      "name": "vaso",
+      "translation": [
+        0,
+        0.08704999834299088,
+        0
+      ]
+    },
+    {
+      "children": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "name": "veladora_2"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "cera.002",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.6700000166893005
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        1,
+        1,
+        1
+      ],
+      "extensions": {
+        "KHR_materials_emissive_strength": {
+          "emissiveStrength": 4
+        }
+      },
+      "name": "llama calida",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "mecha.002",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.8500000238418579
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_transmission": {
+          "transmissionFactor": 1
+        },
+        "KHR_materials_ior": {
+          "ior": 1.4500000476837158
+        }
+      },
+      "name": "vaso.002",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.04500000178813934
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "cera.002",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "llama",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5
+          },
+          "indices": 6,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "mecha.002",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 7,
+            "NORMAL": 8,
+            "TEXCOORD_0": 9
+          },
+          "indices": 10,
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "vaso.002",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 11,
+            "NORMAL": 12,
+            "TEXCOORD_0": 13
+          },
+          "indices": 14,
+          "material": 3
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/png",
+      "name": "veladora_color",
+      "uri": "../../../textures/veladoras/veladora_color.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 1744,
+      "max": [
+        0.03245434910058975,
+        0.07892432063817978,
+        0.03245434910058975
+      ],
+      "min": [
+        -0.03245434910058975,
+        -0.07892431318759918,
+        -0.03245434910058975
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1744,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1744,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 10452,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 866,
+      "max": [
+        0.004672233015298843,
+        0.032999999821186066,
+        0.0030687684193253517
+      ],
+      "min": [
+        -0.0031359894201159477,
+        0,
+        -0.0030687684193253517
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 866,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5123,
+      "count": 5184,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5126,
+      "count": 26,
+      "max": [
+        0.001560981385409832,
+        0.005548388697206974,
+        0.0006736564100719988
+      ],
+      "min": [
+        -0.001382737304084003,
+        -0.005500003695487976,
+        -0.0007673693471588194
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 26,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 26,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5123,
+      "count": 87,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5126,
+      "count": 2951,
+      "max": [
+        0.03550150245428085,
+        0.08705196529626846,
+        0.03550166264176369
+      ],
+      "min": [
+        -0.03550166264176369,
+        -0.08705002814531326,
+        -0.03549962863326073
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 2951,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 2951,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5123,
+      "count": 17364,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 20928,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 20928,
+      "byteOffset": 20928,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13952,
+      "byteOffset": 41856,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 20904,
+      "byteOffset": 55808,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10392,
+      "byteOffset": 76712,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10392,
+      "byteOffset": 87104,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10368,
+      "byteOffset": 97496,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 312,
+      "byteOffset": 107864,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 312,
+      "byteOffset": 108176,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 208,
+      "byteOffset": 108488,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 174,
+      "byteOffset": 108696,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 35412,
+      "byteOffset": 108872,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 35412,
+      "byteOffset": 144284,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 23608,
+      "byteOffset": 179696,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 34728,
+      "byteOffset": 203304,
+      "target": 34963
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 238032,
+      "uri": "veladora_2.bin"
+    }
+  ]
 }

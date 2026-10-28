@@ -43,6 +43,7 @@ add_executable(TexturizadoCempasuchil
     src/Rutas.cpp
     src/render/Shader.cpp
     src/render/ImageLoader.cpp
+    src/render/Skybox.cpp
     src/render/Model.cpp
     src/render/Renderer.cpp
     src/scene/Camera.cpp

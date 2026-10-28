@@ -8,6 +8,7 @@ struct GLFWwindow;
 struct Opciones {
     int ancho=0, alto=0, msaa=4;
     bool comprobar=false;
+    bool diagnosticarRendimiento=false;
     int vistaInicial=0;
 };
 class App {
@@ -15,6 +16,7 @@ public:
     int ejecutar(const Opciones& opciones);
 private:
     bool iniciar();
+    int ejecutarDiagnostico();
     void terminar();
     void procesarEntrada(float dt);
     void aplicarVista(int indice);

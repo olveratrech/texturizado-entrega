@@ -15,6 +15,7 @@
 #pragma once
 
 #include "render/Model.h"
+#include "render/Skybox.h"
 #include "scene/Camino.h"
 #include "scene/SceneNode.h"
 
@@ -58,6 +59,7 @@ public:
     int totalModelosDistintos() const;
 
     Camino camino;
+    Skybox cielo;
 
 private:
     bool cargarModelos();

@@ -9,7 +9,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
+#include <functional>
+#include <vector>
 
 
 static App* g_app = nullptr;
@@ -19,6 +22,12 @@ int App::ejecutar(const Opciones& opciones) {
     if (!iniciar()) {
         terminar();
         return 1;
+    }
+
+    if (op_.diagnosticarRendimiento) {
+        const int codigo = ejecutarDiagnostico();
+        terminar();
+        return codigo;
     }
 
     int cuadros=0;
@@ -35,7 +44,7 @@ int App::ejecutar(const Opciones& opciones) {
         }
         procesarEntrada(dt);
 
-        renderer_.dibujar(escena_.raiz(), camara_, anchoFb_, altoFb_);
+        renderer_.dibujar(escena_.raiz(), camara_, anchoFb_, altoFb_, &escena_.cielo);
 
         glfwSwapBuffers(ventana_);
         if(op_.comprobar && ++cuadros==5) {
@@ -48,6 +57,59 @@ int App::ejecutar(const Opciones& opciones) {
     return 0;
 }
 
+int App::ejecutarDiagnostico() {
+    constexpr int calentamiento = 12;
+    constexpr int muestras = 60;
+    auto medir = [&](const char* nombre, bool luces) {
+        renderer_.lucesPuntuales = luces;
+        double totalMs = 0.0;
+        for (int i = -calentamiento; i < muestras; ++i) {
+            const auto inicio = std::chrono::steady_clock::now();
+            renderer_.dibujar(escena_.raiz(), camara_, anchoFb_, altoFb_, &escena_.cielo);
+            glFinish();
+            const auto fin = std::chrono::steady_clock::now();
+            if (i >= 0)
+                totalMs += std::chrono::duration<double, std::milli>(fin - inicio).count();
+        }
+        const double promedio = totalMs / muestras;
+        registro::info("DIAGNOSTICO %s: %.3f ms/cuadro (%.1f FPS), luces=%d, llamadas=%d, triangulos=%d, instancias=%d",
+                       nombre, promedio, 1000.0 / promedio, renderer_.stats.luces,
+                       renderer_.stats.llamadas, renderer_.stats.triangulos,
+                       renderer_.stats.instancias);
+        return promedio;
+    };
+
+    glfwGetFramebufferSize(ventana_, &anchoFb_, &altoFb_);
+    struct CostoLote { std::string nombre; int instancias; long long triangulos; };
+    std::vector<CostoLote> costos;
+    std::function<void(const Nodo*)> recorrer = [&](const Nodo* nodo) {
+        if (nodo->visible && nodo->lote && nodo->lote->modelo) {
+            const int instancias = nodo->lote->instancias();
+            costos.push_back({nodo->nombre, instancias,
+                              static_cast<long long>(nodo->lote->modelo->triangulos) * instancias});
+        }
+        if (nodo->visible)
+            for (const auto& hijo : nodo->hijos) recorrer(hijo.get());
+    };
+    recorrer(escena_.raiz());
+    std::sort(costos.begin(), costos.end(),
+              [](const CostoLote& a, const CostoLote& b) { return a.triangulos > b.triangulos; });
+    for (size_t i = 0; i < std::min<size_t>(costos.size(), 10); ++i)
+        registro::info("DIAGNOSTICO LOTE #%zu: %s, instancias=%d, triangulos_potenciales=%lld",
+                       i + 1, costos[i].nombre.c_str(), costos[i].instancias, costos[i].triangulos);
+    const double conLuces = medir("CON_LUCES_PUNTUALES", true);
+    const double sinLuces = medir("SIN_LUCES_PUNTUALES", false);
+    glDisable(GL_MULTISAMPLE);
+    const double sinMsaa = medir("CON_LUCES_SIN_MSAA", true);
+    if (op_.msaa > 0) glEnable(GL_MULTISAMPLE);
+    const double costo = conLuces - sinLuces;
+    registro::info("DIAGNOSTICO RESULTADO: costo_luces=%.3f ms (%.1f%% del cuadro con luces)",
+                   costo, conLuces > 0.0 ? 100.0 * costo / conLuces : 0.0);
+    registro::info("DIAGNOSTICO RESULTADO: costo_msaa=%.3f ms (%.1f%% del cuadro con MSAA)",
+                   conLuces - sinMsaa, conLuces > 0.0 ? 100.0 * (conLuces - sinMsaa) / conLuces : 0.0);
+    return glGetError() == GL_NO_ERROR ? 0 : 2;
+}
+
 bool App::iniciar() {
     g_app = this;
     glfwSetErrorCallback([](int codigo, const char* desc) { registro::error("GLFW %d: %s", codigo, desc); });
@@ -55,7 +117,7 @@ bool App::iniciar() {
         registro::fatal("No se pudo iniciar GLFW.");
         return false;
     }
-    if(op_.comprobar)glfwWindowHint(GLFW_VISIBLE,GLFW_FALSE);
+    if(op_.comprobar || op_.diagnosticarRendimiento)glfwWindowHint(GLFW_VISIBLE,GLFW_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -75,7 +137,7 @@ bool App::iniciar() {
         return false;
     }
     glfwMakeContextCurrent(ventana_);
-    glfwSwapInterval(1);  // sincronía vertical: evita trabajo de más en la GPU
+    glfwSwapInterval(op_.diagnosticarRendimiento ? 0 : 1);
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         registro::fatal("No se pudieron cargar las funciones de OpenGL.");
         return false;
@@ -134,6 +196,10 @@ void App::alTeclear(GLFWwindow* v, int tecla, int codigo, int accion, int mods) 
     switch (tecla) {
         case GLFW_KEY_ESCAPE: glfwSetWindowShouldClose(v, GLFW_TRUE); break;
         case GLFW_KEY_F2: a.renderer_.alambre = !a.renderer_.alambre; break;
+        case GLFW_KEY_F:
+            a.renderer_.spotlight = !a.renderer_.spotlight;
+            registro::info("Spotlight de cámara: %s", a.renderer_.spotlight ? "encendido" : "apagado");
+            break;
         case GLFW_KEY_R: a.aplicarVista(0); break;
         default: break;
     }

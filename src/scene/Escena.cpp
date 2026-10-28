@@ -2,6 +2,7 @@
 
 #include "Registro.h"
 #include "Rutas.h"
+#include "render/ImageLoader.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -130,6 +131,8 @@ float alinearZ(const glm::vec3& d) { return glm::degrees(std::atan2(d.x, d.z)); 
 bool Escena::cargar() {
     if (!cargarModelos()) return false;
     crearProcedurales();
+    if (!cielo.iniciar(rutas::asset("skybox/atardecer")))
+        registro::error("No se pudo cargar el cielo nocturno; se usará el color de fondo");
 
     raiz_ = std::make_unique<Nodo>("Escena");
     raiz_->categoria = "grupo";
@@ -208,10 +211,12 @@ void Escena::crearProcedurales() {
         std::vector<uint32_t> idx = {0, 2, 1, 0, 3, 2};
         Material mat;
         mat.nombre = "tierra";
-
-
+        mat.metalico = 0.0f;
+        mat.rugosidad = 0.95f;
+        mat.texturaColor = cargarTextura2D(rutas::asset("textures/tierra.jpg"));
 
         modelos_["terreno"] = Modelo::procedural("terreno", vs, idx, mat);
+        if (mat.texturaColor) modelos_["terreno"]->texturas.push_back(mat.texturaColor);
         catalogo_.push_back({"terreno", "Terreno", "Plano de 200 x 200 m con textura repetida (2 triángulos).",
                              "Procedural", modelos_["terreno"].get(), 0});
     }
@@ -286,6 +291,7 @@ int Escena::totalModelosDistintos() const {
 }
 
 void Escena::liberar() {
+    cielo.liberar();
     raiz_.reset();
     lotes_.clear();
     modelos_.clear();
@@ -492,9 +498,11 @@ void Escena::construirCamino() {
         camino.malla(2.7f, 1.6f, 0.008f, vs, idx);
         Material mat;
         mat.nombre = "empedrado";
-
-
+        mat.metalico = 0.0f;
+        mat.rugosidad = 0.92f;
+        mat.texturaColor = cargarTextura2D(rutas::asset("textures/empedrado.jpg"));
         modelos_["camino_empedrado"] = Modelo::procedural("camino_empedrado", vs, idx, mat);
+        if (mat.texturaColor) modelos_["camino_empedrado"]->texturas.push_back(mat.texturaColor);
         catalogo_.push_back({"camino_empedrado", "Camino empedrado",
                              "Franja generada en código a partir de una spline Catmull-Rom centrípeta.", "Procedural",
                              modelos_["camino_empedrado"].get(), 1});
@@ -512,9 +520,14 @@ void Escena::construirCamino() {
         camino.malla(ancho, ancho, 0.011f, vs, idx);
         Material mat;
         mat.nombre = "alfombra_petalos";
-
-
+        mat.metalico = 0.0f;
+        mat.rugosidad = 0.88f;
+        mat.mascara = true;
+        mat.corteAlfa = 0.18f;
+        mat.dobleCara = true;
+        mat.texturaColor = cargarTextura2D(rutas::asset("textures/alfombra_petalos.png"));
         modelos_["alfombra_petalos"] = Modelo::procedural("alfombra_petalos", vs, idx, mat);
+        if (mat.texturaColor) modelos_["alfombra_petalos"]->texturas.push_back(mat.texturaColor);
         catalogo_.push_back({"alfombra_petalos", "Alfombra de pétalos",
                              "Franja procedural con textura de pétalos y recorte alfa; los pétalos 3D instanciados "
                              "agregan el relieve cercano.",

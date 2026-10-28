@@ -1,510 +1,458 @@
 {
-	"asset":{
-		"generator":"Khronos glTF Blender I/O v5.2.40",
-		"version":"2.0"
-	},
-	"extensionsUsed":[
-		"KHR_materials_specular"
-	],
-	"scene":0,
-	"scenes":[
-		{
-			"name":"dulce_tamarindo",
-			"nodes":[
-				4
-			]
-		}
-	],
-	"nodes":[
-		{
-			"mesh":0,
-			"name":"bola_tamarindo_1",
-			"translation":[
-				-0.02199999988079071,
-				0.020692462101578712,
-				0.013000000268220901
-			]
-		},
-		{
-			"mesh":1,
-			"name":"bola_tamarindo_2",
-			"translation":[
-				0.023000000044703484,
-				0.020692462101578712,
-				0.013000000268220901
-			]
-		},
-		{
-			"mesh":2,
-			"name":"bola_tamarindo_3",
-			"translation":[
-				0,
-				0.01969246193766594,
-				-0.026000000536441803
-			]
-		},
-		{
-			"mesh":3,
-			"name":"granulos_tamarindo",
-			"translation":[
-				-0.02474016696214676,
-				0.020912958309054375,
-				0.03201776370406151
-			]
-		},
-		{
-			"children":[
-				0,
-				1,
-				2,
-				3
-			],
-			"name":"dulce_tamarindo"
-		}
-	],
-	"materials":[
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0.46000000834465027
-				}
-			},
-			"name":"Tamarindo cafe rojizo mate",
-			"normalTexture":{
-				"index":0
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":1
-				},
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":2
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0.46000000834465027
-				}
-			},
-			"name":"Granulado de tamarindo",
-			"normalTexture":{
-				"index":3
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":4
-				},
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":5
-				}
-			}
-		}
-	],
-	"meshes":[
-		{
-			"name":"Sphere",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":0,
-						"NORMAL":1,
-						"TEXCOORD_0":2,
-						"TANGENT":3
-					},
-					"indices":4,
-					"material":0
-				}
-			]
-		},
-		{
-			"name":"Sphere.096",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":5,
-						"NORMAL":6,
-						"TEXCOORD_0":7,
-						"TANGENT":8
-					},
-					"indices":9,
-					"material":0
-				}
-			]
-		},
-		{
-			"name":"Sphere.192",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":10,
-						"NORMAL":11,
-						"TEXCOORD_0":12,
-						"TANGENT":13
-					},
-					"indices":14,
-					"material":0
-				}
-			]
-		},
-		{
-			"name":"Sphere.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":15,
-						"NORMAL":16,
-						"TEXCOORD_0":17,
-						"TANGENT":18
-					},
-					"indices":19,
-					"material":1
-				}
-			]
-		}
-	],
-	"textures":[
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
-		},
-		{
-			"sampler":0,
-			"source":2
-		},
-		{
-			"sampler":0,
-			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
-		},
-		{
-			"sampler":0,
-			"source":2
-		}
-	],
-	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"tamarindo_normal",
-			"uri":"../../../textures/dulces/dulce_tamarindo/tamarindo_normal.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"tamarindo_color",
-			"uri":"../../../textures/dulces/dulce_tamarindo/tamarindo_color.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"tamarindo_rugosidad",
-			"uri":"../../../textures/dulces/dulce_tamarindo/tamarindo_rugosidad.png"
-		}
-	],
-	"accessors":[
-		{
-			"bufferView":0,
-			"componentType":5126,
-			"count":2483,
-			"max":[
-				0.020662562921643257,
-				0.02090255357325077,
-				0.019683798775076866
-			],
-			"min":[
-				-0.02088749222457409,
-				-0.020692462101578712,
-				-0.019688773900270462
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":3,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC4"
-		},
-		{
-			"bufferView":4,
-			"componentType":5123,
-			"count":8928,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":2483,
-			"max":[
-				0.020662562921643257,
-				0.02090255357325077,
-				0.019683798775076866
-			],
-			"min":[
-				-0.02088749222457409,
-				-0.020692462101578712,
-				-0.019688773900270462
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":6,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":7,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":8,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC4"
-		},
-		{
-			"bufferView":9,
-			"componentType":5123,
-			"count":8928,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":10,
-			"componentType":5126,
-			"count":2483,
-			"max":[
-				0.019629433751106262,
-				0.01985742710530758,
-				0.018699608743190765
-			],
-			"min":[
-				-0.019843118265271187,
-				-0.019657837226986885,
-				-0.018704334273934364
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":11,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":12,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":13,
-			"componentType":5126,
-			"count":2483,
-			"type":"VEC4"
-		},
-		{
-			"bufferView":14,
-			"componentType":5123,
-			"count":8928,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":15,
-			"componentType":5126,
-			"count":23085,
-			"max":[
-				0.06831386685371399,
-				0.020167380571365356,
-				0.0006843992741778493
-			],
-			"min":[
-				-0.017380088567733765,
-				-0.015034294687211514,
-				-0.07589729875326157
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":16,
-			"componentType":5126,
-			"count":23085,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":17,
-			"componentType":5126,
-			"count":23085,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":18,
-			"componentType":5126,
-			"count":23085,
-			"type":"VEC4"
-		},
-		{
-			"bufferView":19,
-			"componentType":5123,
-			"count":68400,
-			"type":"SCALAR"
-		}
-	],
-	"bufferViews":[
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":0,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":29796,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":19864,
-			"byteOffset":59592,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":39728,
-			"byteOffset":79456,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":17856,
-			"byteOffset":119184,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":137040,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":166836,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":19864,
-			"byteOffset":196632,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":39728,
-			"byteOffset":216496,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":17856,
-			"byteOffset":256224,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":274080,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":29796,
-			"byteOffset":303876,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":19864,
-			"byteOffset":333672,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":39728,
-			"byteOffset":353536,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":17856,
-			"byteOffset":393264,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":277020,
-			"byteOffset":411120,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":277020,
-			"byteOffset":688140,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":184680,
-			"byteOffset":965160,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":369360,
-			"byteOffset":1149840,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":136800,
-			"byteOffset":1519200,
-			"target":34963
-		}
-	],
-	"samplers":[
-		{
-			"magFilter":9729,
-			"minFilter":9987
-		}
-	],
-	"buffers":[
-		{
-			"byteLength":1656000,
-			"uri":"dulce_tamarindo.bin"
-		}
-	]
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extensionsUsed": [
+    "KHR_materials_specular"
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        4
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "bola_tamarindo_1",
+      "translation": [
+        -0.02199999988079071,
+        0.020692462101578712,
+        0.013000000268220901
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "bola_tamarindo_2",
+      "translation": [
+        0.023000000044703484,
+        0.020692462101578712,
+        0.013000000268220901
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "bola_tamarindo_3",
+      "translation": [
+        0,
+        0.01969246193766594,
+        -0.026000000536441803
+      ]
+    },
+    {
+      "mesh": 3,
+      "name": "granulos_tamarindo",
+      "translation": [
+        -0.02474016696214676,
+        0.020912958309054375,
+        0.03201776370406151
+      ]
+    },
+    {
+      "children": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "name": "dulce_tamarindo"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.46000000834465027
+        }
+      },
+      "name": "Tamarindo cafe rojizo mate",
+      "normalTexture": {
+        "index": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.46000000834465027
+        }
+      },
+      "name": "Granulado de tamarindo",
+      "normalTexture": {
+        "index": 3
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Sphere.002",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Sphere.003",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Sphere.004",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Sphere.005",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 12,
+            "NORMAL": 13,
+            "TEXCOORD_0": 14
+          },
+          "indices": 15,
+          "material": 1
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/png",
+      "name": "tamarindo_normal",
+      "uri": "../../../textures/dulces/dulce_tamarindo/tamarindo_normal.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "tamarindo_color",
+      "uri": "../../../textures/dulces/dulce_tamarindo/tamarindo_color.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "tamarindo_rugosidad",
+      "uri": "../../../textures/dulces/dulce_tamarindo/tamarindo_rugosidad.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 859,
+      "max": [
+        0.020662562921643257,
+        0.02074573189020157,
+        0.020416174083948135
+      ],
+      "min": [
+        -0.021162327378988266,
+        -0.02085447497665882,
+        -0.02025814913213253
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 2232,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 859,
+      "max": [
+        0.020662562921643257,
+        0.02074573189020157,
+        0.020416174083948135
+      ],
+      "min": [
+        -0.021162327378988266,
+        -0.02085447497665882,
+        -0.02025814913213253
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 2232,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 859,
+      "max": [
+        0.019629433751106262,
+        0.01970844715833664,
+        0.019395368173718452
+      ],
+      "min": [
+        -0.020104210823774338,
+        -0.019811751320958138,
+        -0.019245237112045288
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 859,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5123,
+      "count": 2232,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 9120,
+      "max": [
+        0.06806190311908722,
+        0.02016138657927513,
+        0.0004940186627209187
+      ],
+      "min": [
+        -0.01736108399927616,
+        -0.014868096448481083,
+        -0.07591903954744339
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 9120,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5126,
+      "count": 9120,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5123,
+      "count": 17100,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 10308,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6872,
+      "byteOffset": 20616,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 4464,
+      "byteOffset": 27488,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 31952,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 42260,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6872,
+      "byteOffset": 52568,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 4464,
+      "byteOffset": 59440,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 63904,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10308,
+      "byteOffset": 74212,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6872,
+      "byteOffset": 84520,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 4464,
+      "byteOffset": 91392,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 109440,
+      "byteOffset": 95856,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 109440,
+      "byteOffset": 205296,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 72960,
+      "byteOffset": 314736,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 34200,
+      "byteOffset": 387696,
+      "target": 34963
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 421896,
+      "uri": "dulce_tamarindo.bin"
+    }
+  ]
 }

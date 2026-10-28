@@ -16,6 +16,13 @@ int main(int argc, char** argv) {
         if(argumento=="--comprobar")op.comprobar=true;
         if(argumento=="--altar")op.vistaInicial=3;
         if(argumento=="--detalle-altar")op.vistaInicial=4;
+        if(argumento=="--entrada")op.vistaInicial=1;
+        if(argumento=="--diagnosticar-rendimiento") {
+            op.diagnosticarRendimiento=true;
+            op.vistaInicial=4;
+            op.ancho=1600;
+            op.alto=900;
+        }
         if(argumento=="--verificar-apoyos")verificar=true;
     }
     if (!rutas::inicializar(argc > 0 ? argv[0] : nullptr)) {

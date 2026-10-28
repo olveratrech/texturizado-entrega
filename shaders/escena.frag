@@ -30,6 +30,25 @@ uniform sampler2D uTexturaNormal;
 uniform sampler2D uTexturaOclusion;
 uniform sampler2D uTexturaEmision;
 
+struct LuzPuntual {
+    vec3 posicion;
+    vec3 color;
+    float lineal;
+    float cuadratica;
+    float radio2;
+    float farol;
+};
+const int MAX_LUCES = 64;
+uniform int uCantidadLuces;
+uniform LuzPuntual uLuces[MAX_LUCES];
+uniform vec3 uDireccionLuna;
+uniform vec3 uColorLuna;
+uniform vec3 uAmbienteNoche;
+uniform int uSpotActivo;
+uniform int uRecibeLucesPuntuales;
+uniform vec3 uSpotPosicion;
+uniform vec3 uSpotDireccion;
+
 out vec4 FragColor;
 
 vec3 normalMapeada(vec3 base) {
@@ -69,19 +88,60 @@ void main() {
         return;
     }
 
-    vec3 luz = normalize(vec3(-0.55, 0.8, 0.55));
     vec3 vista = normalize(uOjo - vPosicion);
-    vec3 medio = normalize(luz + vista);
-    float ndl = max(dot(normal, luz), 0.0);
-    float ndh = max(dot(normal, medio), 0.0);
     float oclusion = uTieneOclusion != 0
         ? mix(1.0, texture(uTexturaOclusion, vUV).r, uOclusion) : 1.0;
     vec3 f0 = mix(vec3(0.04 * uEspecular), base.rgb, mr.x);
     float brillo = mix(128.0, 4.0, mr.y);
-    vec3 ambiente = base.rgb * mix(0.24, 0.12, mr.x) * oclusion;
-    vec3 difusa = base.rgb * (1.0 - mr.x) * ndl * 0.78;
-    vec3 especular = f0 * pow(ndh, brillo) * ndl * mix(1.0, 0.35, mr.y);
-    vec3 color = ambiente + difusa + especular + emision;
+
+    // Luna: direccional azul tenue, sin la antigua iluminación solar fija.
+    vec3 luzLuna = normalize(uDireccionLuna);
+    float ndlLuna = max(dot(normal, luzLuna), 0.0);
+    vec3 medioLuna = normalize(luzLuna + vista);
+    float specLuna = pow(max(dot(normal, medioLuna), 0.0), brillo) * ndlLuna;
+    vec3 color = base.rgb * uAmbienteNoche * oclusion;
+    color += base.rgb * (1.0 - mr.x) * uColorLuna * ndlLuna;
+    color += f0 * uColorLuna * specLuna * mix(1.0, 0.35, mr.y);
+
+    // Veladoras, cirios y faroles: alcance corto mediante atenuación cuadrática.
+    if (uRecibeLucesPuntuales != 0) {
+        for (int i = 0; i < MAX_LUCES; ++i) {
+            if (i >= uCantidadLuces) break;
+            vec3 delta = uLuces[i].posicion - vPosicion;
+            float distancia2 = dot(delta, delta);
+            if (distancia2 > uLuces[i].radio2) continue;
+            float distancia = sqrt(distancia2);
+            vec3 L = delta / max(distancia, 0.0001);
+            // Los faroles iluminan en todas direcciones; su radio y atenuación
+            // limitan suavemente el alcance alrededor de la estructura.
+            float conoFarol = 1.0;
+            float ndl = max(dot(normal, L), 0.0);
+            float atenuacion = 1.0 / (1.0 + uLuces[i].lineal * distancia +
+                                     uLuces[i].cuadratica * distancia * distancia);
+            vec3 medio = normalize(L + vista);
+            float spec = pow(max(dot(normal, medio), 0.0), brillo) * ndl;
+            color += (base.rgb * (1.0 - mr.x) * ndl + f0 * spec * mix(1.0, 0.35, mr.y))
+                     * uLuces[i].color * atenuacion * conoFarol;
+        }
+    }
+
+    // Linterna opcional de la cámara, con cono suave y atenuación propia.
+    if (uSpotActivo != 0) {
+        vec3 desdeSpot = vPosicion - uSpotPosicion;
+        float distancia = length(desdeSpot);
+        vec3 rayo = desdeSpot / max(distancia, 0.0001);
+        float theta = dot(rayo, normalize(uSpotDireccion));
+        float cono = smoothstep(cos(radians(13.0)), cos(radians(9.0)), theta);
+        vec3 L = -rayo;
+        float ndl = max(dot(normal, L), 0.0);
+        float atenuacion = 1.0 / (1.0 + 0.09 * distancia + 0.032 * distancia * distancia);
+        vec3 medio = normalize(L + vista);
+        float spec = pow(max(dot(normal, medio), 0.0), brillo) * ndl;
+        vec3 luzSpot = vec3(0.95, 0.80, 0.62) * cono * atenuacion;
+        color += (base.rgb * (1.0 - mr.x) * ndl + f0 * spec) * luzSpot;
+    }
+
+    color += emision;
     float frente = max(dot(normal, vista), 0.0);
     float f0Vidrio = pow((uIor - 1.0) / (uIor + 1.0), 2.0);
     float fresnel = f0Vidrio + (1.0 - f0Vidrio) * pow(1.0 - frente, 5.0);
@@ -89,7 +149,7 @@ void main() {
         // Aproximación sin refracción de pantalla: conserva el tinte del vidrio,
         // refuerza cantos y reflejos y permite leer los objetos que hay detrás.
         float aporteColor = uTipoTransparente == 2 ? 0.62 : 0.16;
-        vec3 transmitido = base.rgb * (aporteColor + 0.18 * ndl) +
+        vec3 transmitido = base.rgb * (aporteColor + 0.18 * ndlLuna) +
                            vec3(fresnel * (0.75 + 0.25 * uEspecular));
         color = mix(color, transmitido, clamp(uTransmision, 0.0, 1.0));
     }
