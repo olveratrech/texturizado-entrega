@@ -1,6 +1,7 @@
 #include "render/Model.h"
 
 #include "Registro.h"
+#include "render/ImageLoader.h"
 
 #include <cgltf.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,6 +12,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
+#include <fstream>
+#include <map>
+#include <utility>
 
 namespace fs = std::filesystem;
 
@@ -46,6 +50,71 @@ static cgltf_result leerArchivo(const cgltf_memory_options*, const cgltf_file_op
 
 static void liberarArchivo(const cgltf_memory_options*, const cgltf_file_options*, void* datos) {
     std::free(datos);
+}
+
+static std::string decodificarUri(const char* uri) {
+    if (!uri) return {};
+    std::vector<char> texto(uri, uri + std::strlen(uri) + 1);
+    cgltf_decode_uri(texto.data());
+    return texto.data();
+}
+
+static bool bytesImagen(const cgltf_image& imagen, const fs::path& carpeta,
+                        std::vector<std::uint8_t>& salida) {
+    if (imagen.buffer_view && imagen.buffer_view->buffer && imagen.buffer_view->buffer->data) {
+        const auto* inicio = static_cast<const std::uint8_t*>(imagen.buffer_view->buffer->data) +
+                             imagen.buffer_view->offset;
+        salida.assign(inicio, inicio + imagen.buffer_view->size);
+        return true;
+    }
+    if (!imagen.uri || std::strncmp(imagen.uri, "data:", 5) == 0) return false;
+    const fs::path ruta = carpeta / fs::u8path(decodificarUri(imagen.uri));
+    std::ifstream archivo(ruta, std::ios::binary | std::ios::ate);
+    if (!archivo) return false;
+    const std::streamsize tam = archivo.tellg();
+    if (tam <= 0) return false;
+    salida.resize(static_cast<std::size_t>(tam));
+    archivo.seekg(0);
+    return static_cast<bool>(archivo.read(reinterpret_cast<char*>(salida.data()), tam));
+}
+
+static GLenum envoltura(cgltf_wrap_mode modo) {
+    if (modo == cgltf_wrap_mode_clamp_to_edge) return GL_CLAMP_TO_EDGE;
+    if (modo == cgltf_wrap_mode_mirrored_repeat) return GL_MIRRORED_REPEAT;
+    return GL_REPEAT;
+}
+
+static bool filtroCercano(cgltf_filter_type filtro) {
+    return filtro == cgltf_filter_type_nearest || filtro == cgltf_filter_type_nearest_mipmap_nearest ||
+           filtro == cgltf_filter_type_nearest_mipmap_linear;
+}
+
+static GLuint subirTextura(const cgltf_texture& textura, const fs::path& carpeta, bool srgb) {
+    const cgltf_image* imagen = textura.image;
+    if (!imagen) return 0;
+    std::vector<std::uint8_t> bytes;
+    ImagenRGBA rgba;
+    if (!bytesImagen(*imagen, carpeta, bytes) || !decodificarImagen(bytes.data(), bytes.size(), rgba)) {
+        registro::error("No se pudo decodificar la textura %s", imagen->uri ? imagen->uri : "(embebida)");
+        return 0;
+    }
+
+    GLuint id = 0;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB8_ALPHA8 : GL_RGBA8, rgba.ancho, rgba.alto, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, rgba.pixeles.data());
+    glGenerateMipmap(GL_TEXTURE_2D);
+    const cgltf_sampler* s = textura.sampler;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s ? envoltura(s->wrap_s) : GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, s ? envoltura(s->wrap_t) : GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                    s && filtroCercano(s->mag_filter) ? GL_NEAREST : GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    s && filtroCercano(s->min_filter) ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return id;
 }
 
 // ---------------------------------------------------------------------------
@@ -122,18 +191,44 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
         return false;
     }
 
-    // --- materiales -----------------------------------------------------------
+    // --- materiales y texturas ------------------------------------------------
+    const fs::path carpetaModelo = fs::u8path(rutaArchivo).parent_path();
+    std::map<std::pair<const cgltf_texture*, bool>, GLuint> cacheTexturas;
+    auto textura = [&](const cgltf_texture_view& vista, bool srgb) {
+        if (soloCPU || !vista.texture) return GLuint(0);
+        const auto clave = std::make_pair(static_cast<const cgltf_texture*>(vista.texture), srgb);
+        auto encontrada = cacheTexturas.find(clave);
+        if (encontrada != cacheTexturas.end()) return encontrada->second;
+        const GLuint id = subirTextura(*vista.texture, carpetaModelo, srgb);
+        cacheTexturas.emplace(clave, id);
+        if (id) texturas.push_back(id);
+        return id;
+    };
     for (cgltf_size i = 0; i < d->materials_count; ++i) {
         const cgltf_material& m = d->materials[i];
         Material mat;
         if (m.name) mat.nombre = m.name;
-        // Se conserva la geometria, pero todos los materiales son opacos y mates.
-
-
-
-
-
-
+        if (m.has_pbr_metallic_roughness) {
+            const auto& pbr = m.pbr_metallic_roughness;
+            mat.colorBase = glm::make_vec4(pbr.base_color_factor);
+            mat.metalico = pbr.metallic_factor;
+            mat.rugosidad = pbr.roughness_factor;
+            mat.texturaColor = textura(pbr.base_color_texture, true);
+            mat.texturaMetalRugosidad = textura(pbr.metallic_roughness_texture, false);
+        }
+        mat.emision = glm::make_vec3(m.emissive_factor) *
+                      (m.has_emissive_strength ? m.emissive_strength.emissive_strength : 1.0f);
+        mat.texturaNormal = textura(m.normal_texture, false);
+        mat.texturaOclusion = textura(m.occlusion_texture, false);
+        mat.texturaEmision = textura(m.emissive_texture, true);
+        mat.escalaNormal = m.normal_texture.texture ? m.normal_texture.scale : 1.0f;
+        mat.oclusion = m.occlusion_texture.texture ? m.occlusion_texture.scale : 1.0f;
+        mat.especular = m.has_specular ? m.specular.specular_factor : 1.0f;
+        mat.transmision = m.has_transmission ? m.transmission.transmission_factor : 0.0f;
+        mat.mezcla = m.alpha_mode == cgltf_alpha_mode_blend || mat.transmision > 0.0f;
+        mat.mascara = m.alpha_mode == cgltf_alpha_mode_mask;
+        mat.corteAlfa = m.alpha_cutoff > 0.0f ? m.alpha_cutoff : 0.5f;
+        mat.sinLuz = m.unlit;
         mat.dobleCara = m.double_sided;
         materiales.push_back(mat);
     }
@@ -315,5 +410,8 @@ void Modelo::liberar() {
             p.vao = p.vbo = p.ebo = 0;
         }
     }
+    for (GLuint textura : texturas)
+        if (textura) glDeleteTextures(1, &textura);
+    texturas.clear();
     mallas.clear();
 }

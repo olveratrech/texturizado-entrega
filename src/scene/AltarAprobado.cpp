@@ -418,9 +418,8 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
   if(!puesto)throw std::runtime_error(std::string("Sin espacio para: ")+c.nombre);
   if(!complementosLotes.count(c.clave))
    complementosLotes[c.clave]=nodoLote(c.clave,altarAprobado,std::string("Complementos compartidos · ")+c.clave)->lote;
-  const float tono=std::string(c.clave).rfind("portarretrato_",0)==0?.72f:1.f;
   complementosLotes[c.clave]->agregar(glm::translate(glm::mat4(1),pos)*giro*
-      glm::scale(glm::mat4(1),glm::vec3(escalaObjeto))*glm::translate(glm::mat4(1),-offset),glm::vec4(tono,tono,tono,1));
+      glm::scale(glm::mat4(1),glm::vec3(escalaObjeto))*glm::translate(glm::mat4(1),-offset));
   info(c.clave)->usos++;
   ocupados.push_back(elegido);
   registro::info("COMPLEMENTO: %s, XZ=(%.3f,%.3f), altura=%.3f, giro Y=%.1f",c.nombre,pos.x,pos.z,c.altura,c.giro);
@@ -558,9 +557,8 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
   if(!puesto)throw std::runtime_error(std::string("Sin espacio para: ")+c.nombre);
   if(!complementosLotes.count(c.clave))
    complementosLotes[c.clave]=nodoLote(c.clave,altarAprobado,std::string("Complementos compartidos · ")+c.clave)->lote;
-  const float tono=std::string(c.clave).rfind("portarretrato_",0)==0?.72f:1.f;
   complementosLotes[c.clave]->agregar(glm::translate(glm::mat4(1),pos)*giro*
-      glm::scale(glm::mat4(1),glm::vec3(escalaObjeto))*glm::translate(glm::mat4(1),-offset),glm::vec4(tono,tono,tono,1));
+      glm::scale(glm::mat4(1),glm::vec3(escalaObjeto))*glm::translate(glm::mat4(1),-offset));
   info(c.clave)->usos++;
   ocupados.push_back(elegido);
   registro::info("VAJILLA: %s, XZ=(%.3f,%.3f), altura=%.3f, giro Y=%.1f",c.nombre,pos.x,pos.z,c.altura,c.giro);
@@ -652,24 +650,36 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
  std::array<int,3> gruposPorPiso{};int totalPan=0,totalGrupos4=0,totalGrupos3=0;
  for(const auto& sitio:sitiosPan) {
   const auto& forma=sitio.cantidad==4?forma4:forma3;
-  const glm::mat4 matriz=glm::translate(glm::mat4(1),glm::vec3(sitio.x,pisos[sitio.piso-1].y,sitio.z))*
-      glm::rotate(glm::mat4(1),glm::radians(sitio.giro),{0,1,0})*
-      glm::scale(glm::mat4(1),glm::vec3(escalaPan))*glm::translate(glm::mat4(1),-forma.centro);
-  const Volumen b=envolver(forma.caja.lo,forma.caja.hi,matriz);
-  // Validar cada pan: la caja global incluye huecos vacíos entre las bases.
+  // La malla texturizada tiene una envolvente distinta a la versión gris. Se
+  // conserva el tamaño de 12 cm y se busca el desplazamiento libre más cercano
+  // a cada posición aprobada, en pasos de 2.5 cm y hasta 35 cm.
+  std::vector<glm::vec2> ajustesPan;
+  for(int z=-14;z<=14;++z)for(int x=-14;x<=14;++x)ajustesPan.push_back({x*.025f,z*.025f});
+  std::stable_sort(ajustesPan.begin(),ajustesPan.end(),[](auto a,auto b){return glm::dot(a,a)<glm::dot(b,b);});
+  glm::mat4 matriz(1);Volumen b;glm::vec2 posicionFinal;bool colocado=false;
   auto basePan=pan.min;basePan.y=pan.baseY;
-  for(const auto& pieza:forma.piezas) {
-   const auto caja=envolver(basePan,pan.max,matriz*glm::translate(glm::mat4(1),pieza-perfilPan.offset));
-   if(!libreEnPiso(caja,sitio.piso,margenPan))throw std::runtime_error("Grupo de pan invade otra pieza");
+  for(const auto& ajuste:ajustesPan) {
+   posicionFinal={sitio.x+ajuste.x,sitio.z+ajuste.y};
+   const glm::mat4 prueba=glm::translate(glm::mat4(1),glm::vec3(posicionFinal.x,pisos[sitio.piso-1].y,posicionFinal.y))*
+       glm::rotate(glm::mat4(1),glm::radians(sitio.giro),{0,1,0})*
+       glm::scale(glm::mat4(1),glm::vec3(escalaPan))*glm::translate(glm::mat4(1),-forma.centro);
+   bool libre=true;
+   for(const auto& pieza:forma.piezas) {
+    const auto caja=envolver(basePan,pan.max,prueba*glm::translate(glm::mat4(1),pieza-perfilPan.offset));
+    if(!libreEnPiso(caja,sitio.piso,margenPan)){libre=false;break;}
+   }
+   if(libre){matriz=prueba;b=envolver(forma.caja.lo,forma.caja.hi,matriz);colocado=true;break;}
   }
+  if(!colocado)throw std::runtime_error("No se encontró espacio cercano para un grupo de pan texturizado");
   for(const auto& pieza:forma.piezas) {
    lotePan->agregar(matriz*glm::translate(glm::mat4(1),pieza-perfilPan.offset));
    info("pan_de_muerto")->usos++;totalPan++;
   }
   ocupados.push_back(b);gruposPorPiso[sitio.piso-1]++;
   if(sitio.cantidad==4)totalGrupos4++;else totalGrupos3++;
-  registro::info("GRUPO PAN: P%d, %d+1, XZ=(%.3f,%.3f), giro=%.0f, pan=12 cm",
-      sitio.piso,sitio.cantidad-1,sitio.x,sitio.z,sitio.giro);
+  registro::info("GRUPO PAN: P%d, %d+1, XZ=(%.3f,%.3f), ajuste=(%.3f,%.3f), giro=%.0f, pan=12 cm",
+      sitio.piso,sitio.cantidad-1,posicionFinal.x,posicionFinal.y,posicionFinal.x-sitio.x,posicionFinal.y-sitio.z,
+      sitio.giro);
  }
  if(totalGrupos4!=7 || totalGrupos3!=3 || totalPan!=37)throw std::runtime_error("Cantidad de pan distinta de la solicitada");
  registro::info("PAN: %d grupos 3+1, %d grupos 2+1, %d panes; grupos por piso=%d/%d/%d; tamaño único y sin mover modelos previos",
@@ -841,6 +851,7 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
  registro::info("CEMPASUCHIL: %d pétalos y %d cabezas; distribución fija, sin mover las 217 piezas aprobadas",totalPetalos,totalCabezas);
 
  // Ampliación solicitada: conservar todos los pétalos/cabezas previos y añadir al final.
+ const int petalosPrevios=totalPetalos,cabezasPrevias=totalCabezas;
  struct PetaloExtra {Volumen caja;int piso;};
  std::vector<PetaloExtra> petalosExistentes;
  for(const auto& m:lotePetalos->transformaciones) {
@@ -904,7 +915,11 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
    throw std::runtime_error("Falta espacio para completar la ampliación floral");
   registro::info("AMPLIACION FLORAL: P%d, +%d cabezas, +%d pétalos",nivel,floresAgregadas,petalosAgregados);
  }
- if(totalCabezas!=50 || totalPetalos!=2766)throw std::runtime_error("Recuento floral incorrecto");
- registro::info("CEMPASUCHIL FINAL: %d pétalos y %d cabezas; 1149 colocaciones anteriores intactas",totalPetalos,totalCabezas);
+ const int cabezasEsperadas=cabezasPrevias+floresAdicionales[0]+floresAdicionales[1]+floresAdicionales[2];
+ const int petalosEsperados=petalosPrevios+petalosAdicionales[0]+petalosAdicionales[1]+petalosAdicionales[2];
+ if(totalCabezas!=cabezasEsperadas || totalPetalos!=petalosEsperados)
+  throw std::runtime_error("Recuento floral incorrecto");
+ registro::info("CEMPASUCHIL FINAL: %d pétalos y %d cabezas; %d colocaciones anteriores intactas",
+     totalPetalos,totalCabezas,petalosPrevios+cabezasPrevias);
 
 }

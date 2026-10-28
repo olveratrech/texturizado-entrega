@@ -351,20 +351,12 @@ void Escena::construirCasaYOfrenda() {
     Nodo* aprobado=ofrenda->agregar("Altar aprobado");
     const int usosAntes=totalInstancias();
     construirAltarAprobado(aprobado);
-    if(totalInstancias()-usosAntes!=3033)throw std::runtime_error("Cantidad de piezas importadas incorrecta");
+    // Las nuevas envolventes texturizadas dejan espacio para 21 pétalos más
+    // en el espolvoreado determinista: 3054 instancias en la composición completa.
+    if(totalInstancias()-usosAntes!=3054)throw std::runtime_error("Cantidad de piezas importadas incorrecta");
     ofrenda->colocar({0.0f,0.15f,1.40f},{0,0,0},glm::vec3(.95f));
     // Ajuste autorizado: petate de 1.90 m de ancho, entre las bases de las columnas.
     if(auto* petate=aprobado->buscar("petate"))petate->escala.x=1.f/(1.5f*.95f);
-    // Mantener los tonos de la composición de prueba, sólo dentro del altar importado.
-    std::function<void(Nodo*)> conservarTonos=[&](Nodo* n) {
-        if(n->raizInstancia && !n->hijos.empty() && n->hijos.front()->modelo) {
-            const auto& clave=n->hijos.front()->modelo->nombre;
-            const float tono=clave=="altar_muertos"?.22f:(clave.rfind("papel_",0)==0?.96f:(clave.rfind("portarretrato_",0)==0?.72f:1.f));
-            n->tinte=glm::vec4(tono,tono,tono,1);
-        }
-        for(auto& h:n->hijos)conservarTonos(h.get());
-    };
-    conservarTonos(aprobado);
     // Comprobar el conjunto ya ajustado contra las medidas reales del portal (marco local de la casa).
     aprobado->actualizar(ofrenda->matrizLocal());
     glm::vec3 minimo(1e20f),maximo(-1e20f);

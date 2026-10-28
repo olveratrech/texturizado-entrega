@@ -42,6 +42,7 @@ add_executable(TexturizadoCempasuchil
     src/Registro.cpp
     src/Rutas.cpp
     src/render/Shader.cpp
+    src/render/ImageLoader.cpp
     src/render/Model.cpp
     src/render/Renderer.cpp
     src/scene/Camera.cpp
@@ -63,6 +64,14 @@ target_include_directories(TexturizadoCempasuchil PRIVATE
 
 target_link_libraries(TexturizadoCempasuchil PRIVATE glfw glad)
 target_compile_definitions(TexturizadoCempasuchil PRIVATE GLM_ENABLE_EXPERIMENTAL)
+
+if(APPLE)
+    find_library(IMAGEIO_FRAMEWORK ImageIO REQUIRED)
+    find_library(COREGRAPHICS_FRAMEWORK CoreGraphics REQUIRED)
+    find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+    target_link_libraries(TexturizadoCempasuchil PRIVATE
+        ${IMAGEIO_FRAMEWORK} ${COREGRAPHICS_FRAMEWORK} ${COREFOUNDATION_FRAMEWORK})
+endif()
 
 if(MSVC)
     target_compile_options(TexturizadoCempasuchil PRIVATE /W3 /utf-8)

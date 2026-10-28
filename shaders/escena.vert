@@ -4,25 +4,35 @@
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNormal;
+layout(location = 2) in vec2 aUV;
 #ifdef INSTANCIADO
 layout(location = 3) in mat4 aInstancia;  // ocupa las ubicaciones 3, 4, 5 y 6
+layout(location = 7) in vec4 aTinte;
 uniform mat4 uPadre;  // matriz de mundo del nodo dueño del lote
 #endif
 
 uniform mat4 uModelo;    // sin instancias: matriz de mundo; con instancias: matriz del nodo dentro del modelo
 uniform mat3 uNormal;    // inversa transpuesta de uModelo (escala no uniforme)
 uniform mat4 uVistaProy;
+uniform vec4 uTinte;
 
 out vec3 vNormal;
+out vec3 vPosicion;
+out vec2 vUV;
+out vec4 vTinte;
 
 void main() {
 #ifdef INSTANCIADO
     mat4 M = uPadre * aInstancia * uModelo;
     vNormal = mat3(M) * aNormal;  // las instancias usan escala uniforme
+    vTinte = uTinte * aTinte;
 #else
     mat4 M = uModelo;
     vNormal = uNormal * aNormal;
+    vTinte = uTinte;
 #endif
     vec4 p = M * vec4(aPos, 1.0);
+    vPosicion = p.xyz;
+    vUV = aUV;
     gl_Position = uVistaProy * p;
 }

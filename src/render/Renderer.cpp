@@ -46,8 +46,9 @@ static float escalaMaxima(const glm::mat4& m) {
     return std::max({glm::length(glm::vec3(m[0])), glm::length(glm::vec3(m[1])), glm::length(glm::vec3(m[2]))});
 }
 
-void Renderer::recolectar(Nodo* n) {
+void Renderer::recolectar(Nodo* n, const glm::vec4& tintePadre) {
     if (!n->visible) return;
+    const glm::vec4 tinte = tintePadre * n->tinte;
     if (n->modelo && n->malla >= 0) {
         const Malla& malla = n->modelo->mallas[static_cast<size_t>(n->malla)];
         float esc = escalaMaxima(n->mundo);
@@ -62,9 +63,9 @@ void Renderer::recolectar(Nodo* n) {
             d.prim = &p;
             d.mat = &n->modelo->materiales[static_cast<size_t>(p.material)];
             d.matriz = n->mundo;
-
-
-            opacos_.push_back(d);
+            d.tinte = tinte;
+            d.distancia2 = glm::dot(c - ojo_, c - ojo_);
+            (d.mat->mezcla ? transparentes_ : opacos_).push_back(d);
         }
     }
     if (n->lote && n->lote->instancias() > 0) {
@@ -83,26 +84,50 @@ void Renderer::recolectar(Nodo* n) {
                     d.padre = n->mundo;
                     d.lote = &L;
                     d.vaoInstancias = L.vaosDe(e)[k];
-
-
-                    opacos_.push_back(d);
+                    d.tinte = tinte;
+                    d.distancia2 = glm::dot(c - ojo_, c - ojo_);
+                    (d.mat->mezcla ? transparentes_ : opacos_).push_back(d);
                 }
             }
         } else {
             stats.descartados += static_cast<int>(L.modelo->plano.size());
         }
     }
-    for (auto& h : n->hijos) recolectar(h.get());
+    for (auto& h : n->hijos) recolectar(h.get(), tinte);
 }
 
-void Renderer::aplicarMaterial(const Shader&, const Material& m) {
+void Renderer::aplicarMaterial(const Shader& s, const Material& m) {
     if (m.dobleCara || alambre) glDisable(GL_CULL_FACE);
     else glEnable(GL_CULL_FACE);
+    s.set("uColorBase", m.colorBase);
+    s.set("uEmision", m.emision);
+    s.set("uMetalico", m.metalico);
+    s.set("uRugosidad", m.rugosidad);
+    s.set("uEscalaNormal", m.escalaNormal);
+    s.set("uOclusion", m.oclusion);
+    s.set("uEspecular", m.especular);
+    s.set("uTransmision", m.transmision);
+    s.set("uCorteAlfa", m.corteAlfa);
+    s.set("uMascara", m.mascara ? 1 : 0);
+    s.set("uSinLuz", m.sinLuz ? 1 : 0);
+    const GLuint ids[] = {m.texturaColor, m.texturaMetalRugosidad, m.texturaNormal,
+                          m.texturaOclusion, m.texturaEmision};
+    const char* presentes[] = {"uTieneColor", "uTieneMetalRugosidad", "uTieneNormal",
+                               "uTieneOclusion", "uTieneEmision"};
+    const char* samplers[] = {"uTexturaColor", "uTexturaMetalRugosidad", "uTexturaNormal",
+                              "uTexturaOclusion", "uTexturaEmision"};
+    for (int i = 0; i < 5; ++i) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, ids[i]);
+        s.set(presentes[i], ids[i] ? 1 : 0);
+        s.set(samplers[i], i);
+    }
 }
 
 void Renderer::emitir(const Dibujo& d) {
     const Shader& s = d.lote ? shaderInst_ : shader_;
     aplicarMaterial(s, *d.mat);
+    s.set("uTinte", d.tinte);
     if (d.lote) {
         s.set("uPadre", d.padre);
         s.set("uModelo", d.matriz);
@@ -126,6 +151,7 @@ void Renderer::dibujar(Nodo* raiz, const Camara& camara, int ancho, int alto) {
     glm::mat4 vista = camara.vista();
     glm::mat4 proy = camara.proyeccion(aspecto);
     vistaProy_ = proy * vista;
+    ojo_ = camara.ojo();
 
     glm::vec4 planos[6];
     extraerPlanos(vistaProy_, planos);
@@ -135,7 +161,10 @@ void Renderer::dibujar(Nodo* raiz, const Camara& camara, int ancho, int alto) {
     }
 
     opacos_.clear();
+    transparentes_.clear();
     recolectar(raiz);
+    std::stable_sort(transparentes_.begin(), transparentes_.end(),
+                     [](const Dibujo& a, const Dibujo& b) { return a.distancia2 > b.distancia2; });
     glViewport(0, 0, ancho, alto);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -155,6 +184,7 @@ void Renderer::dibujar(Nodo* raiz, const Camara& camara, int ancho, int alto) {
         s->usar();
         s->set("uVistaProy", vistaProy_);
         s->set("uAlambre", alambre ? 1 : 0);
+        s->set("uOjo", ojo_);
     }
 
     const Shader* actual = nullptr;
@@ -166,6 +196,20 @@ void Renderer::dibujar(Nodo* raiz, const Camara& camara, int ancho, int alto) {
         }
         emitir(d);
     }
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
+    for (const Dibujo& d : transparentes_) {
+        const Shader* s = d.lote ? &shaderInst_ : &shader_;
+        if (s != actual) {
+            s->usar();
+            actual = s;
+        }
+        emitir(d);
+    }
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
 
     if (alambre) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glBindVertexArray(0);

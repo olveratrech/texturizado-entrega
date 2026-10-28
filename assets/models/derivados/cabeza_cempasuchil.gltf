@@ -326,6 +326,6 @@
   ],
   "extras": {
     "origen": "flor_cempasuchil.gltf",
-    "seleccion": "Solo nodo petalos; geometría original sin modificaciones ni duplicación del binario."
+    "seleccion": "Solo nodo petalos."
   }
 }

@@ -25,6 +25,23 @@ struct Vertice {
 struct Material {
     std::string nombre = "material";
     bool dobleCara = false;
+    bool mezcla = false;
+    bool mascara = false;
+    bool sinLuz = false;
+    float corteAlfa = 0.5f;
+    glm::vec4 colorBase{1.0f};
+    glm::vec3 emision{0.0f};
+    float metalico = 1.0f;
+    float rugosidad = 1.0f;
+    float escalaNormal = 1.0f;
+    float oclusion = 1.0f;
+    float especular = 1.0f;
+    float transmision = 0.0f;
+    GLuint texturaColor = 0;
+    GLuint texturaMetalRugosidad = 0;
+    GLuint texturaNormal = 0;
+    GLuint texturaOclusion = 0;
+    GLuint texturaEmision = 0;
 };
 
 struct Primitiva {
@@ -58,6 +75,7 @@ public:
     std::string ruta;
     std::vector<Malla> mallas;
     std::vector<Material> materiales;
+    std::vector<GLuint> texturas;
     std::vector<NodoModelo> nodos;
     std::vector<int> raices;
 
