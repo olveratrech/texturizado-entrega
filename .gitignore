@@ -34,9 +34,14 @@ registro.txt
 *.log
 *.tmp
 
-# En doc/ se publica únicamente el PDF final de texturizado.
-/doc/**
-!/doc/Equipo-8-texturizado.pdf
+# En doc/ se versionan las fuentes, imágenes y PDF finales; sólo se excluyen
+# los auxiliares regenerables de LaTeX.
+/doc/**/*.aux
+/doc/**/*.fdb_latexmk
+/doc/**/*.fls
+/doc/**/*.out
+/doc/**/*.synctex.gz
+/doc/**/*.toc
 
 # Archivos locales del sistema y de edición.
 .DS_Store
