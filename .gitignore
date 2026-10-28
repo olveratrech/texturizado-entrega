@@ -4,6 +4,8 @@
 /cmake-build-*/
 /out/
 /.vs/
+/.vscode/
+/.idea/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
@@ -21,6 +23,11 @@ compile_commands.json
 *.a
 *.pdb
 *.ilk
+*.dll
+*.lib
+*.exp
+*.so
+*.dylib
 
 # Registros y archivos temporales de ejecución.
 registro.txt
@@ -33,6 +40,10 @@ registro.txt
 
 # Archivos locales del sistema y de edición.
 .DS_Store
+Thumbs.db
+Desktop.ini
+core
+core.*
 *~
 *.swp
 *.bak
