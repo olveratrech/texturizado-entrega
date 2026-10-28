@@ -107,6 +107,8 @@ void Renderer::aplicarMaterial(const Shader& s, const Material& m) {
     s.set("uOclusion", m.oclusion);
     s.set("uEspecular", m.especular);
     s.set("uTransmision", m.transmision);
+    s.set("uIor", m.ior);
+    s.set("uTipoTransparente", m.tipoTransparente);
     s.set("uCorteAlfa", m.corteAlfa);
     s.set("uMascara", m.mascara ? 1 : 0);
     s.set("uSinLuz", m.sinLuz ? 1 : 0);

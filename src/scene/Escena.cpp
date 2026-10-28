@@ -176,6 +176,19 @@ bool Escena::cargarModelos() {
     };
     for (const Ficha& f : kPropios)
         if (!cargarUno(f.clave, rutas::asset(std::string("models/propios/") + f.carpeta + f.clave + ".gltf"), f, "Propio")) return false;
+    // La cabeza suelta conserva su geometría derivada, pero reutiliza el
+    // material de pétalos del modelo completo para no duplicar otra exportación.
+    if (Modelo* cabeza = modelo("cabeza_cempasuchil")) {
+        if (Modelo* flor = modelo("flor_cempasuchil")) {
+            auto fuente = std::find_if(flor->materiales.begin(), flor->materiales.end(), [](const Material& m) {
+                return m.nombre == "Petalo_Cempasuchil";
+            });
+            auto destino = std::find_if(cabeza->materiales.begin(), cabeza->materiales.end(), [](const Material& m) {
+                return m.nombre == "Petalo_Cempasuchil";
+            });
+            if (fuente != flor->materiales.end() && destino != cabeza->materiales.end()) *destino = *fuente;
+        }
+    }
     for (const Ficha& f : kLibreria)
         if (!cargarUno(f.clave, rutas::asset(std::string("models/libreria/kenney_graveyard/") + f.clave + ".glb"), f,
                        "Librería"))
@@ -227,6 +240,22 @@ void Escena::crearProcedurales() {
         mat.nombre = "hilo";
         modelos_["hilo_papel"] = Modelo::procedural("hilo_papel", vs, indices, mat);
         catalogo_.push_back({"hilo_papel", "Hilo de papel picado", "", "Procedural", modelos_["hilo_papel"].get(), 0});
+    }
+
+    // Plano unitario para cubrir cada nivel del altar sin modificar su modelo exportado.
+    {
+        std::vector<Vertice> vs = {{{-0.5f, 0, -0.5f}, {0, 1, 0}, {0, 0}},
+                                   {{ 0.5f, 0, -0.5f}, {0, 1, 0}, {1, 0}},
+                                   {{ 0.5f, 0,  0.5f}, {0, 1, 0}, {1, 1}},
+                                   {{-0.5f, 0,  0.5f}, {0, 1, 0}, {0, 1}}};
+        std::vector<uint32_t> idx = {0, 2, 1, 0, 3, 2};
+        Material mat;
+        mat.nombre = "cubierta_mate";
+        mat.metalico = 0.0f;
+        mat.rugosidad = 0.86f;
+        modelos_["cubierta_piso"] = Modelo::procedural("cubierta_piso", vs, idx, mat);
+        catalogo_.push_back({"cubierta_piso", "Cubiertas de los pisos", "Planos de color sobre los tres niveles.",
+                             "Procedural", modelos_["cubierta_piso"].get(), 0});
     }
 
 }
@@ -322,6 +351,11 @@ Nodo* Escena::crearTiraPapel(Nodo* padre, const std::string& nombre,
     Nodo* hilo = instanciar("hilo_papel", tira, "hilo", {0, 0, 0});
     hilo->escala.x = ancho / 3.0f;
     constexpr int cantidad = 8;
+    const std::array<glm::vec4,7> colores{{
+        {0.82f,0.05f,0.34f,1}, {0.42f,0.08f,0.72f,1}, {1.00f,0.28f,0.03f,1},
+        {0.03f,0.38f,0.88f,1}, {0.08f,0.62f,0.24f,1}, {0.96f,0.70f,0.03f,1},
+        {0.88f,0.06f,0.08f,1}
+    }};
     float paso = ancho / cantidad;
     for (int i = 0; i < cantidad; ++i) {
         std::string clave = "papel_" + std::to_string(1 + (i + variante) % 6);
@@ -332,9 +366,10 @@ Nodo* Escena::crearTiraPapel(Nodo* padre, const std::string& nombre,
         Nodo* soporte = tira->agregar("pliego_" + std::to_string(i + 1));
         soporte->colocar({x, y, 0}, {0, 0, glm::degrees(std::atan(pendiente))});
         float escala = paso * 0.85f / (m->max.x - m->min.x);
-        instanciar(clave, soporte, clave,
-                   {-0.5f * (m->min.x + m->max.x) * escala, -m->max.y * escala, 0},
-                   0.0f, escala);
+        Nodo* pliego = instanciar(clave, soporte, clave,
+                                  {-0.5f * (m->min.x + m->max.x) * escala, -m->max.y * escala, 0},
+                                  0.0f, escala);
+        pliego->tinte = colores[static_cast<size_t>((i + variante * 3) % colores.size())];
     }
     return tira;
 }
@@ -352,8 +387,8 @@ void Escena::construirCasaYOfrenda() {
     const int usosAntes=totalInstancias();
     construirAltarAprobado(aprobado);
     // Las nuevas envolventes texturizadas dejan espacio para 21 pétalos más
-    // en el espolvoreado determinista: 3054 instancias en la composición completa.
-    if(totalInstancias()-usosAntes!=3054)throw std::runtime_error("Cantidad de piezas importadas incorrecta");
+    // en el espolvoreado determinista, más las tres cubiertas de color: 3057 instancias.
+    if(totalInstancias()-usosAntes!=3057)throw std::runtime_error("Cantidad de piezas importadas incorrecta");
     ofrenda->colocar({0.0f,0.15f,1.40f},{0,0,0},glm::vec3(.95f));
     // Ajuste autorizado: petate de 1.90 m de ancho, entre las bases de las columnas.
     if(auto* petate=aprobado->buscar("petate"))petate->escala.x=1.f/(1.5f*.95f);

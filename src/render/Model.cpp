@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cctype>
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <map>
@@ -215,6 +217,8 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
             mat.rugosidad = pbr.roughness_factor;
             mat.texturaColor = textura(pbr.base_color_texture, true);
             mat.texturaMetalRugosidad = textura(pbr.metallic_roughness_texture, false);
+            if (pbr.base_color_texture.texture) mat.texcoord = pbr.base_color_texture.texcoord;
+            else if (pbr.metallic_roughness_texture.texture) mat.texcoord = pbr.metallic_roughness_texture.texcoord;
         }
         mat.emision = glm::make_vec3(m.emissive_factor) *
                       (m.has_emissive_strength ? m.emissive_strength.emissive_strength : 1.0f);
@@ -225,6 +229,23 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
         mat.oclusion = m.occlusion_texture.texture ? m.occlusion_texture.scale : 1.0f;
         mat.especular = m.has_specular ? m.specular.specular_factor : 1.0f;
         mat.transmision = m.has_transmission ? m.transmission.transmission_factor : 0.0f;
+        mat.ior = m.has_ior ? m.ior.ior : 1.5f;
+        std::string nombreMaterial = mat.nombre;
+        std::transform(nombreMaterial.begin(), nombreMaterial.end(), nombreMaterial.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        if (mat.transmision > 0.0f) {
+            mat.tipoTransparente = 1;
+            if (nombreMaterial.find("agua") != std::string::npos ||
+                nombreMaterial.find("cerveza") != std::string::npos)
+                mat.tipoTransparente = 2;
+        }
+        // Ajustes artísticos de los líquidos solicitados para esta escena. Se aplican
+        // sobre el factor exportado, sin alterar las texturas ni el vidrio envolvente.
+        if (nombreMaterial.find("victoria cerveza") != std::string::npos)
+            mat.colorBase *= glm::vec4(0.42f, 0.25f, 0.12f, 1.0f);
+        if (nombreMaterial.find("agua transparente como vaso") != std::string::npos)
+            mat.colorBase *= glm::vec4(0.28f, 0.62f, 1.0f, 1.0f);
+        if (!m.has_pbr_metallic_roughness && m.normal_texture.texture) mat.texcoord = m.normal_texture.texcoord;
         mat.mezcla = m.alpha_mode == cgltf_alpha_mode_blend || mat.transmision > 0.0f;
         mat.mascara = m.alpha_mode == cgltf_alpha_mode_mask;
         mat.corteAlfa = m.alpha_cutoff > 0.0f ? m.alpha_cutoff : 0.5f;
@@ -242,12 +263,15 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
         for (cgltf_size j = 0; j < cm.primitives_count; ++j) {
             const cgltf_primitive& pr = cm.primitives[j];
             if (pr.type != cgltf_primitive_type_triangles) continue;
+            int mat = pr.material ? static_cast<int>(cgltf_material_index(d, pr.material)) : 0;
+            if (mat < 0 || static_cast<size_t>(mat) >= materiales.size()) mat = 0;
+            const int uvMaterial = materiales[static_cast<size_t>(mat)].texcoord;
             const cgltf_accessor *apos = nullptr, *anor = nullptr, *auv = nullptr;
             for (cgltf_size k = 0; k < pr.attributes_count; ++k) {
                 const cgltf_attribute& a = pr.attributes[k];
                 if (a.type == cgltf_attribute_type_position) apos = a.data;
                 else if (a.type == cgltf_attribute_type_normal) anor = a.data;
-                else if (a.type == cgltf_attribute_type_texcoord && a.index == 0) auv = a.data;
+                else if (a.type == cgltf_attribute_type_texcoord && a.index == uvMaterial) auv = a.data;
             }
             if (!apos) continue;
             std::vector<Vertice> vs(apos->count);
@@ -276,7 +300,6 @@ bool Modelo::cargar(const std::string& rutaArchivo) {
             }
             if(nombre=="pan_de_muerto"||nombre.rfind("dulce_",0)==0)
                 for(auto v:idx)malla.superficie.push_back(vs[v].pos);
-            int mat = pr.material ? static_cast<int>(cgltf_material_index(d, pr.material)) : 0;
             malla.primitivas.push_back(crearPrimitiva(vs, idx, mat));
             triangulos += static_cast<int>(idx.size() / 3);
             vertices += static_cast<int>(vs.size());

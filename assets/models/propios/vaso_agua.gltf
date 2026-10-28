@@ -12,17 +12,43 @@
 		{
 			"name":"vaso de agua",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
+			"name":"agua"
+		},
+		{
+			"mesh":1,
 			"name":"vaso"
 		}
 	],
 	"materials":[
+		{
+			"doubleSided":true,
+			"extensions":{
+				"KHR_materials_transmission":{
+					"transmissionFactor":1
+				},
+				"KHR_materials_ior":{
+					"ior":1.3329999446868896
+				}
+			},
+			"name":"agua transparente",
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":0
+				},
+				"metallicFactor":0,
+				"metallicRoughnessTexture":{
+					"index":1
+				}
+			}
+		},
 		{
 			"doubleSided":true,
 			"extensions":{
@@ -36,18 +62,18 @@
 			"name":"vaso transparente",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":2
 				},
 				"metallicFactor":0,
 				"metallicRoughnessTexture":{
-					"index":1
+					"index":3
 				}
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"vaso",
+			"name":"agua",
 			"primitives":[
 				{
 					"attributes":{
@@ -60,6 +86,21 @@
 					"material":0
 				}
 			]
+		},
+		{
+			"name":"vaso",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":5,
+						"NORMAL":6,
+						"TEXCOORD_0":7,
+						"TANGENT":8
+					},
+					"indices":9,
+					"material":1
+				}
+			]
 		}
 	],
 	"textures":[
@@ -70,9 +111,27 @@
 		{
 			"sampler":0,
 			"source":1
+		},
+		{
+			"sampler":0,
+			"source":2
+		},
+		{
+			"sampler":0,
+			"source":3
 		}
 	],
 	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"agua_color",
+			"uri":"../../textures/vaso_agua/agua_color.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"agua_rugosidad",
+			"uri":"../../textures/vaso_agua/agua_rugosidad.png"
+		},
 		{
 			"mimeType":"image/png",
 			"name":"vaso_color",
@@ -88,6 +147,46 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
+			"count":4746,
+			"max":[
+				0.03471709042787552,
+				0.11876999586820602,
+				0.03471709042787552
+			],
+			"min":[
+				-0.03471709042787552,
+				0.014700000174343586,
+				-0.03471709042787552
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":1,
+			"componentType":5126,
+			"count":4746,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":2,
+			"componentType":5126,
+			"count":4746,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":3,
+			"componentType":5126,
+			"count":4746,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":4,
+			"componentType":5123,
+			"count":26112,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
 			"count":14082,
 			"max":[
 				0.03799999877810478,
@@ -102,25 +201,25 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
+			"bufferView":6,
 			"componentType":5126,
 			"count":14082,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
+			"bufferView":7,
 			"componentType":5126,
 			"count":14082,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
+			"bufferView":8,
 			"componentType":5126,
 			"count":14082,
 			"type":"VEC4"
 		},
 		{
-			"bufferView":4,
+			"bufferView":9,
 			"componentType":5123,
 			"count":79104,
 			"type":"SCALAR"
@@ -129,32 +228,62 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":168984,
+			"byteLength":56952,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
+			"byteLength":56952,
+			"byteOffset":56952,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":37968,
+			"byteOffset":113904,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":75936,
+			"byteOffset":151872,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":52224,
+			"byteOffset":227808,
+			"target":34963
+		},
+		{
+			"buffer":0,
 			"byteLength":168984,
-			"byteOffset":168984,
+			"byteOffset":280032,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":168984,
+			"byteOffset":449016,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":112656,
-			"byteOffset":337968,
+			"byteOffset":618000,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":225312,
-			"byteOffset":450624,
+			"byteOffset":730656,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":158208,
-			"byteOffset":675936,
+			"byteOffset":955968,
 			"target":34963
 		}
 	],
@@ -166,7 +295,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":834144,
+			"byteLength":1114176,
 			"uri":"vaso_agua.bin"
 		}
 	]

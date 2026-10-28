@@ -37,6 +37,9 @@ struct Material {
     float oclusion = 1.0f;
     float especular = 1.0f;
     float transmision = 0.0f;
+    float ior = 1.5f;
+    int tipoTransparente = 0; // 0=opaco, 1=vidrio, 2=líquido
+    int texcoord = 0;
     GLuint texturaColor = 0;
     GLuint texturaMetalRugosidad = 0;
     GLuint texturaNormal = 0;

@@ -699,6 +699,17 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
   anchoMinimo=std::min(anchoMinimo,papeles[i]->max.x-papeles[i]->min.x);
  }
  std::mt19937 azarPapel(27102026u);
+ std::mt19937 azarColorPapel(27102029u);
+ const std::array<glm::vec4,7> coloresPapel{{
+  {0.82f,0.05f,0.34f,1}, // rosa mexicano
+  {0.42f,0.08f,0.72f,1}, // morado
+  {1.00f,0.28f,0.03f,1}, // naranja
+  {0.03f,0.38f,0.88f,1}, // azul
+  {0.08f,0.62f,0.24f,1}, // verde
+  {0.96f,0.70f,0.03f,1}, // amarillo
+  {0.88f,0.06f,0.08f,1}  // rojo
+ }};
+ int colorPapelAnterior=-1;
  auto anchoPapel=[&](int i){return papeles[i]->max.x-papeles[i]->min.x;};
  // Elegir el máximo número que cabe, reservando espacio para los pendientes.
  // En el frente, las variantes se eligen por parejas reflejadas; los costados comparten fila.
@@ -752,7 +763,10 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
        b.hi.y>o.lo.y+.0001f && b.lo.y<o.hi.y-.0001f &&
        b.hi.z>o.lo.z+.0001f && b.lo.z<o.hi.z-.0001f)
      throw std::runtime_error("Papel picado invade una pieza existente");
-   lotesPapel[variante]->agregar(matriz,glm::vec4(.96f,.96f,.96f,1));
+   int color=int(azarColorPapel()%coloresPapel.size());
+   if(color==colorPapelAnterior)color=(color+1+int(azarColorPapel()%(coloresPapel.size()-1)))%coloresPapel.size();
+   colorPapelAnterior=color;
+   lotesPapel[variante]->agregar(matriz,coloresPapel[static_cast<size_t>(color)]);
    info("papel_"+std::to_string(variante+1))->usos++;totalPapeles++;
    ocupados.push_back(b);
    registro::info("PAPEL: P%d, lado=%d, variante=%d, anclaje=(%.4f,%.4f,%.4f), ancho=%.3f",
@@ -921,5 +935,23 @@ void Escena::construirAltarAprobado(Nodo* altarAprobado) {
   throw std::runtime_error("Recuento floral incorrecto");
  registro::info("CEMPASUCHIL FINAL: %d pétalos y %d cabezas; %d colocaciones anteriores intactas",
      totalPetalos,totalCabezas,petalosPrevios+cabezasPrevias);
+
+ // Cubiertas colocadas al final para que no intervengan en las comprobaciones de
+ // espacio de las ofrendas y flores. El leve desplazamiento evita parpadeo Z.
+ constexpr std::array<glm::vec4,3> coloresPiso = {{
+     {0.32f, 0.07f, 0.48f, 1.0f},
+     {0.94f, 0.30f, 0.035f, 1.0f},
+     {0.32f, 0.07f, 0.48f, 1.0f}
+ }};
+ constexpr float fondoAltarCubierta = -1.425f;
+ for (int nivel=0;nivel<3;++nivel) {
+  const auto& piso=pisos[nivel];
+  const float profundidad=piso.frente-fondoAltarCubierta;
+  auto* cubierta=instanciar("cubierta_piso",altarAprobado,
+      "Cubierta piso "+std::to_string(nivel+1),
+      {0,piso.y+.00015f,(piso.frente+fondoAltarCubierta)*.5f});
+  cubierta->escala={2.0f*piso.mitadAncho,1.0f,profundidad};
+  cubierta->tinte=coloresPiso[nivel];
+ }
 
 }

@@ -14,6 +14,8 @@ uniform float uEscalaNormal;
 uniform float uOclusion;
 uniform float uEspecular;
 uniform float uTransmision;
+uniform float uIor;
+uniform int uTipoTransparente;
 uniform float uCorteAlfa;
 uniform int uMascara;
 uniform int uSinLuz;
@@ -80,7 +82,20 @@ void main() {
     vec3 difusa = base.rgb * (1.0 - mr.x) * ndl * 0.78;
     vec3 especular = f0 * pow(ndh, brillo) * ndl * mix(1.0, 0.35, mr.y);
     vec3 color = ambiente + difusa + especular + emision;
+    float frente = max(dot(normal, vista), 0.0);
+    float f0Vidrio = pow((uIor - 1.0) / (uIor + 1.0), 2.0);
+    float fresnel = f0Vidrio + (1.0 - f0Vidrio) * pow(1.0 - frente, 5.0);
+    if (uTransmision > 0.0) {
+        // Aproximación sin refracción de pantalla: conserva el tinte del vidrio,
+        // refuerza cantos y reflejos y permite leer los objetos que hay detrás.
+        float aporteColor = uTipoTransparente == 2 ? 0.62 : 0.16;
+        vec3 transmitido = base.rgb * (aporteColor + 0.18 * ndl) +
+                           vec3(fresnel * (0.75 + 0.25 * uEspecular));
+        color = mix(color, transmitido, clamp(uTransmision, 0.0, 1.0));
+    }
     color = color / (color + vec3(1.0));
-    float alfa = base.a * (1.0 - 0.75 * clamp(uTransmision, 0.0, 1.0));
+    float alfaBase = uTipoTransparente == 2 ? 0.34 : 0.10;
+    float alfaVidrio = clamp(alfaBase + fresnel * 0.72 + (1.0 - mr.y) * 0.08, 0.08, 0.92);
+    float alfa = base.a * mix(1.0, alfaVidrio, clamp(uTransmision, 0.0, 1.0));
     FragColor = vec4(pow(max(color, vec3(0.0)), vec3(1.0 / 2.2)), alfa);
 }
